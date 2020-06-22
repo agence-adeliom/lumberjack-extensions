@@ -1,0 +1,84 @@
+{
+    "name": "adeliom/wp-extensions",
+    "description": "",
+    "keywords": [
+        "adeliom",
+        "adeliom-wp-extensions"
+    ],
+    "homepage": "https://github.com/adeliom/wp-extensions",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Arnaud Ritti",
+            "email": "ari@adeliom.com",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "advanced-custom-fields/advanced-custom-fields-pro",
+                "version": "5.8.12",
+                "type": "wordpress-muplugin",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://connect.advancedcustomfields.com/index.php?a=download&p=pro&k={%PLUGIN_ACF_KEY}&t={%VERSION}"
+                },
+                "require": {
+                    "composer/installers": "^1.4",
+                    "ffraenz/private-composer-installer": "^4.0"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "../adeliom-wp-cli",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "blast/facades": "^1.0",
+        "rareloop/lumberjack-core": "^4.3",
+        "rareloop/lumberjack-email": "*",
+        "rareloop/lumberjack-validation": "*",
+        "rareloop/lumberjack-debugbar": "*",
+        "google/recaptcha": "^1.2",
+        "advanced-custom-fields/advanced-custom-fields-pro": "*",
+        "roots/bedrock-disallow-indexing": "^2.0",
+        "dugajean/wp-hook-annotations": "dev-master",
+        "adeliom/wp-cli": "dev-master",
+        "wp-cli/wp-cli-bundle": "*",
+        "soberwp/intervention": "*",
+        "wordplate/acf": "*",
+        "phpoption/phpoption": "^1.7",
+        "brick/event": "^0.1",
+        "haydenpierce/class-finder": "^0.4",
+        "djboris88/timber-debugger": "^1.1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Adeliom\\WP\\Extensions\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Adeliom\\WP\\Extensions\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
