@@ -4,7 +4,6 @@
  * Intervention functions/modules
  * @link https://github.com/soberwp/intervention/blob/master/README.md
  */
-use function Sober\Intervention\intervention;
 
 if (function_exists('Sober\Intervention\intervention')) {
     /*

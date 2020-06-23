@@ -3,7 +3,7 @@
 
 namespace Adeliom\WP\Extensions\Commands;
 
-use Adeliom\WP\Commands\MakeFromStubCommand;
+use Adeliom\WP\CLI\Commands\MakeFromStubCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -40,7 +40,7 @@ class PublishConfigs extends MakeFromStubCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $force = (bool) $input->getOption('force');
+        $force       = (bool)$input->getOption('force');
         $configFiles = glob(__DIR__ . '/../../config/*.php');
         foreach ($configFiles as $file) {
             $stub = file_get_contents($file);

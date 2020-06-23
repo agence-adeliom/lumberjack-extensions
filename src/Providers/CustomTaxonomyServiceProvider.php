@@ -5,7 +5,6 @@ namespace Adeliom\WP\Extensions\Providers;
 
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
-use Timber\Timber;
 
 /**
  * Class CustomTaxonomyServiceProvider

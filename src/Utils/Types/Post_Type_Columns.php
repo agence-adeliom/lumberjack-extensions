@@ -2,6 +2,8 @@
 
 namespace Adeliom\WP\Extensions\Utils\Types;
 
+use WP_Query;
+
 /**
  * Class Post_Type_Columns
  */
@@ -25,7 +27,7 @@ class Post_Type_Columns
      * Post_Type_Columns constructor.
      *
      * @param string $post_type A post type slug.
-     * @param array  $columns   An array of columns to be edited.
+     * @param array $columns An array of columns to be edited.
      */
     public function __construct($post_type, $columns)
     {
@@ -36,23 +38,23 @@ class Post_Type_Columns
                 // Set defaults for thumbnail.
                 if ('thumbnail' === $slug) {
                     $column = wp_parse_args($column, [
-                        'title'  => __('Featured Image', 'mind/types'),
-                        'width'  => 80,
+                        'title' => __('Featured Image', 'mind/types'),
+                        'width' => 80,
                         'height' => 80,
                     ]);
                 }
 
                 // Set defaults for each field.
                 $column = wp_parse_args($column, [
-                    'title'      => '',
-                    'type'       => 'meta',
-                    'transform'  => null,
-                    'sortable'   => true,
+                    'title' => '',
+                    'type' => 'meta',
+                    'transform' => null,
+                    'sortable' => true,
                     'searchable' => false,
                 ]);
             }
 
-            $this->columns[ $slug ] = $column;
+            $this->columns[$slug] = $column;
         }
     }
 
@@ -61,7 +63,7 @@ class Post_Type_Columns
      */
     public function init()
     {
-        add_filter('manage_edit-' . $this->post_type . '_columns', [ $this, 'columns' ]);
+        add_filter('manage_edit-' . $this->post_type . '_columns', [$this, 'columns']);
         add_filter('manage_edit-' . $this->post_type . '_sortable_columns', [
             $this,
             'columns_sortable',
@@ -72,7 +74,7 @@ class Post_Type_Columns
         ], 10, 2);
 
         if (is_admin()) {
-            add_filter('pre_get_posts', [ $this, 'search_custom_fields' ]);
+            add_filter('pre_get_posts', [$this, 'search_custom_fields']);
         }
     }
 
@@ -88,11 +90,11 @@ class Post_Type_Columns
         foreach ($this->columns as $slug => $column) {
             // Columns can be removed when they are set to 'false'
             if (false === $column) {
-                unset($columns[ $slug ]);
+                unset($columns[$slug]);
                 continue;
             }
 
-            $columns[ $slug ] = $column['title'];
+            $columns[$slug] = $column['title'];
         }
 
         return $columns;
@@ -109,8 +111,8 @@ class Post_Type_Columns
     {
         foreach ($this->columns as $slug => $column) {
             // Remove column when it’s not sortable.
-            if (! $column['sortable']) {
-                unset($columns[ $slug ]);
+            if (!$column['sortable']) {
+                unset($columns[$slug]);
                 continue;
             }
         }
@@ -122,18 +124,18 @@ class Post_Type_Columns
      * Update column contents for post list view.
      *
      * @param string $column_name The column slug.
-     * @param int    $post_id     The post ID.
+     * @param int $post_id The post ID.
      */
     public function column_content($column_name, $post_id)
     {
         // Bail out.
         if (empty($this->columns)
-            || ! in_array($column_name, array_keys($this->columns), true)
+            || !in_array($column_name, array_keys($this->columns), true)
         ) {
             return;
         }
 
-        $column = $this->columns[ $column_name ];
+        $column = $this->columns[$column_name];
 
         if ('thumbnail' === $column_name) {
             $src = get_the_post_thumbnail_url($post_id, 'thumbnail');
@@ -144,13 +146,13 @@ class Post_Type_Columns
 
             $styles = '';
 
-            foreach ([ 'width', 'height' ] as $attr) {
-                if (isset($column[ $attr ])) {
-                    $styles .= $attr . ':' . $column[ $attr ] . 'px;';
+            foreach (['width', 'height'] as $attr) {
+                if (isset($column[$attr])) {
+                    $styles .= $attr . ':' . $column[$attr] . 'px;';
                 }
             }
 
-            if (! empty($styles)) {
+            if (!empty($styles)) {
                 $styles = ' style="' . $styles . '"';
             }
 
@@ -175,14 +177,14 @@ class Post_Type_Columns
     /**
      * Includeds searchable custom fields in the search.
      *
-     * @param \WP_Query $query WordPress query object.
+     * @param WP_Query $query WordPress query object.
      */
-    public function search_custom_fields(\WP_Query $query)
+    public function search_custom_fields(WP_Query $query)
     {
         global $typenow;
         $searchterm = $query->query_vars['s'];
 
-        if (! $query->is_main_query() || $typenow !== $this->post_type || empty($searchterm)) {
+        if (!$query->is_main_query() || $typenow !== $this->post_type || empty($searchterm)) {
             return;
         }
 
@@ -190,12 +192,12 @@ class Post_Type_Columns
             return 'meta' === $column['type'] && $column['searchable'];
         });
 
-        $meta_query = [ 'relation' => 'OR' ];
+        $meta_query = ['relation' => 'OR'];
 
         foreach ($meta_columns as $key => $column) {
             $meta_query[] = [
-                'key'     => $key,
-                'value'   => $searchterm,
+                'key' => $key,
+                'value' => $searchterm,
                 'compare' => 'LIKE',
             ];
         }

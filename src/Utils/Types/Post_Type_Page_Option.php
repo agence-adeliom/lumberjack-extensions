@@ -35,7 +35,7 @@ class Post_Type_Page_Option
     /**
      * Post_Type_Page_Option constructor.
      *
-     * @param string $post_type          The post type to register the customizer section for.
+     * @param string $post_type The post type to register the customizer section for.
      * @param string $customizer_section The name of the customizer section where the option to set
      *                                   the page should be added to. The section already needs to
      *                                   exist.
@@ -52,11 +52,11 @@ class Post_Type_Page_Option
      */
     public function init()
     {
-        if (! is_admin() && ! is_customize_preview()) {
+        if (!is_admin() && !is_customize_preview()) {
             return;
         }
 
-        add_action('customize_register', [ $this, 'register_settings' ]);
+        add_action('customize_register', [$this, 'register_settings']);
 
         /**
          * Rewrite rules need to be flushed in the next page load after the Custom Post Type was
@@ -65,17 +65,17 @@ class Post_Type_Page_Option
          */
         add_action(
             "update_option_{$this->option_name}",
-            [ $this, 'maybe_set_flush_transient' ],
+            [$this, 'maybe_set_flush_transient'],
             10,
             2
         );
-        add_action('admin_init', [ $this, 'maybe_flush_rewrite_rules' ]);
+        add_action('admin_init', [$this, 'maybe_flush_rewrite_rules']);
     }
 
     /**
      * Adds Customizer setting and control.
      *
-     * @param \WP_Customize_Manager $wp_customize Customizer instance.
+     * @param WP_Customize_Manager $wp_customize Customizer instance.
      */
     public function register_settings(WP_Customize_Manager $wp_customize)
     {
@@ -86,13 +86,13 @@ class Post_Type_Page_Option
         ]);
 
         $wp_customize->add_control($this->option_name, [
-            'label'          => sprintf(
-                /* translators: Post type label. */
+            'label' => sprintf(
+            /* translators: Post type label. */
                 __('Page for %s', 'mind/types'),
                 $post_type_object->label
             ),
-            'section'        => $this->customizer_section,
-            'type'           => 'dropdown-pages',
+            'section' => $this->customizer_section,
+            'type' => 'dropdown-pages',
             'allow_addition' => true,
         ]);
     }
@@ -101,7 +101,7 @@ class Post_Type_Page_Option
      * Sets transient to flush rewrite rules when option value changes.
      *
      * @param mixed $old_value The old option value.
-     * @param mixed $value     The new option value.
+     * @param mixed $value The new option value.
      */
     public function maybe_set_flush_transient($old_value, $value)
     {

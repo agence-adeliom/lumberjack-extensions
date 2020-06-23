@@ -38,9 +38,9 @@ class Taxonomy_Labels
     /**
      * Taxonomy_Labels constructor.
      *
-     * @param string $taxonomy      The post type slug.
+     * @param string $taxonomy The post type slug.
      * @param string $name_singular The singular name of the post type.
-     * @param string $name_plural   The plural name of the post type.
+     * @param string $name_plural The plural name of the post type.
      */
     public function __construct($taxonomy, $name_singular, $name_plural = '')
     {
@@ -55,6 +55,69 @@ class Taxonomy_Labels
     }
 
     /**
+     * Get labels for taxonomy base on singular and plural name.
+     *
+     * The following labels are not translated, because they don’t contain the post type name:
+     * most_used
+     *
+     * @link https://developer.wordpress.org/reference/functions/get_taxonomy_labels/
+     *
+     * @param string $name_singular Singular name for taxonomy.
+     * @param string $name_plural Plural name for taxonomy.
+     *
+     * @return array The translated labels.
+     */
+    public function get_labels($name_singular, $name_plural)
+    {
+        $labels = [
+            'name' => $name_plural,
+            'singular_name' => $name_singular,
+            /* translators: %s: Singular taxonomy name */
+            'add_new_item' => sprintf(__('Add New %s', 'mind/types'), $name_singular),
+            /* translators: %s: Plural taxonomy name */
+            'add_or_remove_items' => sprintf(__('Add or remove %s', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'all_items' => sprintf(__('All %s', 'mind/types'), $name_plural),
+            /* translators: %s: Singular post type name */
+            'archives' => sprintf(__('%s Archives', 'mind/types'), $name_singular),
+            /* translators: %s: Plural taxonomy name */
+            'back_to_items' => sprintf(__('&larr; Back to %s', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'choose_from_most_used' => sprintf(__('Choose from the most used %s', 'mind/types'), $name_plural),
+            /* translators: %s: Singular taxonomy name */
+            'edit_item' => sprintf(__('Edit %s', 'mind/types'), $name_singular),
+            /* translators: %s: Plural taxonomy name */
+            'items_list' => sprintf(__('%s list', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'items_list_navigation' => sprintf(__('%s list navigation', 'mind/types'), $name_plural),
+            /* translators: %s: Singular taxonomy name */
+            'new_item_name' => sprintf(__('New %s Name', 'mind/types'), $name_singular),
+            /* translators: %s: Plural taxonomy name */
+            'no_terms' => sprintf(__('No %s', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'not_found' => sprintf(__('No %s found.', 'mind/types'), $name_plural),
+            /* translators: %s: Singular taxonomy name */
+            'parent_item' => sprintf(__('Parent %s', 'mind/types'), $name_singular),
+            /* translators: %s: Singular taxonomy name */
+            'parent_item_colon' => sprintf(__('Parent %s:', 'mind/types'), $name_singular),
+            /* translators: %s: Plural taxonomy name */
+            'popular_items' => sprintf(__('Popular %s', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'search_items' => sprintf(__('Search %s', 'mind/types'), $name_plural),
+            /* translators: %s: Plural taxonomy name */
+            'separate_items_with_commas' => sprintf(__('Separate %s with commas', 'mind/types'), $name_plural),
+            /* translators: %s: Singular taxonomy name */
+            'update_item' => sprintf(__('Update %s', 'mind/types'), $name_singular),
+            /* translators: %s: Singular taxonomy name */
+            'view_item' => sprintf(__('View %s', 'mind/types'), $name_singular),
+            'name_admin_bar' => $name_singular,
+            'menu_name' => $name_plural,
+        ];
+
+        return $labels;
+    }
+
+    /**
      * Inits hooks.
      */
     public function init()
@@ -65,71 +128,8 @@ class Taxonomy_Labels
 
         if (is_admin()) {
             // Update messages in backend.
-            add_filter('term_updated_messages', [ $this, 'add_term_updated_messages' ]);
+            add_filter('term_updated_messages', [$this, 'add_term_updated_messages']);
         }
-    }
-
-    /**
-     * Get labels for taxonomy base on singular and plural name.
-     *
-     * The following labels are not translated, because they don’t contain the post type name:
-     * most_used
-     *
-     * @link https://developer.wordpress.org/reference/functions/get_taxonomy_labels/
-     *
-     * @param string $name_singular Singular name for taxonomy.
-     * @param string $name_plural   Plural name for taxonomy.
-     *
-     * @return array The translated labels.
-     */
-    public function get_labels($name_singular, $name_plural)
-    {
-        $labels = [
-            'name'                       => $name_plural,
-            'singular_name'              => $name_singular,
-            /* translators: %s: Singular taxonomy name */
-            'add_new_item'               => sprintf(__('Add New %s', 'mind/types'), $name_singular),
-            /* translators: %s: Plural taxonomy name */
-            'add_or_remove_items'        => sprintf(__('Add or remove %s', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'all_items'                  => sprintf(__('All %s', 'mind/types'), $name_plural),
-            /* translators: %s: Singular post type name */
-            'archives'                   => sprintf(__('%s Archives', 'mind/types'), $name_singular),
-            /* translators: %s: Plural taxonomy name */
-            'back_to_items'              => sprintf(__('&larr; Back to %s', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'choose_from_most_used'      => sprintf(__('Choose from the most used %s', 'mind/types'), $name_plural),
-            /* translators: %s: Singular taxonomy name */
-            'edit_item'                  => sprintf(__('Edit %s', 'mind/types'), $name_singular),
-            /* translators: %s: Plural taxonomy name */
-            'items_list'                 => sprintf(__('%s list', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'items_list_navigation'      => sprintf(__('%s list navigation', 'mind/types'), $name_plural),
-            /* translators: %s: Singular taxonomy name */
-            'new_item_name'              => sprintf(__('New %s Name', 'mind/types'), $name_singular),
-            /* translators: %s: Plural taxonomy name */
-            'no_terms'                   => sprintf(__('No %s', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'not_found'                  => sprintf(__('No %s found.', 'mind/types'), $name_plural),
-            /* translators: %s: Singular taxonomy name */
-            'parent_item'                => sprintf(__('Parent %s', 'mind/types'), $name_singular),
-            /* translators: %s: Singular taxonomy name */
-            'parent_item_colon'          => sprintf(__('Parent %s:', 'mind/types'), $name_singular),
-            /* translators: %s: Plural taxonomy name */
-            'popular_items'              => sprintf(__('Popular %s', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'search_items'               => sprintf(__('Search %s', 'mind/types'), $name_plural),
-            /* translators: %s: Plural taxonomy name */
-            'separate_items_with_commas' => sprintf(__('Separate %s with commas', 'mind/types'), $name_plural),
-            /* translators: %s: Singular taxonomy name */
-            'update_item'                => sprintf(__('Update %s', 'mind/types'), $name_singular),
-            /* translators: %s: Singular taxonomy name */
-            'view_item'                  => sprintf(__('View %s', 'mind/types'), $name_singular),
-            'name_admin_bar'             => $name_singular,
-            'menu_name'                  => $name_plural,
-        ];
-
-        return $labels;
     }
 
     /**
@@ -143,7 +143,7 @@ class Taxonomy_Labels
      */
     public function add_term_updated_messages($messages)
     {
-        $messages[ $this->taxonomy ] = [
+        $messages[$this->taxonomy] = [
             0 => '',
             /* translators: %s: Singular taxonomy name */
             1 => sprintf(__('%s added.', 'mind/types'), $this->name_singular),

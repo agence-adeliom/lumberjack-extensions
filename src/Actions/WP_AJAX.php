@@ -2,6 +2,12 @@
 
 namespace Adeliom\WP\Extensions\Actions;
 
+use Exception;
+use ReflectionClass;
+use ReflectionException;
+use WP;
+use WP_User;
+
 /**
  * Class WP_AJAX
  * @see https://github.com/anthonybudd/WP_AJAX
@@ -10,36 +16,27 @@ namespace Adeliom\WP\Extensions\Actions;
 abstract class WP_AJAX
 {
     /**
+     * @var array
+     */
+    public $request;
+    /**
+     * @var WP|null
+     */
+    public $wp;
+    /**
+     * @var WP_User|null
+     */
+    public $user;
+    /**
      * The action name
      * @var string
      */
     protected $action;
-
     /**
      * Allow all users and visitor to executed the action
      * @var bool
      */
     protected $public = true;
-
-    /**
-     * @var array
-     */
-    public $request;
-
-    /**
-     * @var \WP|null
-     */
-    public $wp;
-
-    /**
-     * @var \WP_User|null
-     */
-    public $user;
-
-    /**
-     * @return mixed
-     */
-    abstract protected function run();
 
     /**
      * WP_AJAX constructor.
@@ -55,6 +52,14 @@ abstract class WP_AJAX
         }
     }
 
+    /**
+     * @return bool
+     */
+    public function is_logged_in()
+    {
+        return is_user_logged_in();
+    }
+
     public static function boot()
     {
         $class  = self::get_class_name();
@@ -64,12 +69,26 @@ abstract class WP_AJAX
     }
 
     /**
-     * @throws \Exception
+     * Return the current class name
+     * @return false|string
+     */
+    public static function get_class_name()
+    {
+        return get_called_class();
+    }
+
+
+    // -----------------------------------------------------
+    // UTILITY METHODS
+    // -----------------------------------------------------
+
+    /**
+     * @throws Exception
      */
     public static function listen()
     {
         $actionName = self::get_action_name();
-        $public = self::is_public();
+        $public     = self::is_public();
         $className  = self::get_class_name();
         add_action("wp_ajax_{$actionName}", [$className, 'boot']);
 
@@ -78,17 +97,42 @@ abstract class WP_AJAX
         }
     }
 
-
-    // -----------------------------------------------------
-    // UTILITY METHODS
-    // -----------------------------------------------------
     /**
-     * Return the current class name
-     * @return false|string
+     * Return the action name
+     * @return mixed
+     * @throws ReflectionException
      */
-    public static function get_class_name()
+    public static function get_action_name()
     {
-        return get_called_class();
+        // pbrocks renamed since self::get_action_name() otherwise undefined
+        // public static function action() {
+        $class      = self::get_class_name();
+        $reflection = new ReflectionClass($class);
+        $action     = $reflection->newInstanceWithoutConstructor();
+        if (!isset($action->action)) {
+            throw new Exception('Public property $action not provied');
+        }
+
+        return $action->action;
+    }
+
+    /**
+     * Get if the action is public
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public static function is_public()
+    {
+        // pbrocks renamed since self::get_action_name() otherwise undefined
+        // public static function action() {
+        $class      = self::get_class_name();
+        $reflection = new ReflectionClass($class);
+        $action     = $reflection->newInstanceWithoutConstructor();
+        if (!isset($action->public)) {
+            throw new Exception('Public property $public not provied');
+        }
+
+        return $action->public;
     }
 
     /**
@@ -100,89 +144,10 @@ abstract class WP_AJAX
         return admin_url('/admin-ajax.php');
     }
 
-    /**
-     * Return the action name
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    public static function get_action_name()
-    {
-        // pbrocks renamed since self::get_action_name() otherwise undefined
-        // public static function action() {
-        $class      = self::get_class_name();
-        $reflection = new \ReflectionClass($class);
-        $action     = $reflection->newInstanceWithoutConstructor();
-        if (!isset($action->action)) {
-            throw new \Exception('Public property $action not provied');
-        }
-
-        return $action->action;
-    }
-
-    /**
-     * Get if the action is public
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    public static function is_public()
-    {
-        // pbrocks renamed since self::get_action_name() otherwise undefined
-        // public static function action() {
-        $class      = self::get_class_name();
-        $reflection = new \ReflectionClass($class);
-        $action     = $reflection->newInstanceWithoutConstructor();
-        if (!isset($action->public)) {
-            throw new \Exception('Public property $public not provied');
-        }
-
-        return $action->public;
-    }
-
 
 
     // -----------------------------------------------------
     // JSONResponse
-    // -----------------------------------------------------
-    /**
-     * Handle a redirect back to referrer
-     * @return bool
-     */
-    public function return_back_json()
-    {
-        if (isset($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            die();
-        }
-
-        return false;
-    }
-
-    /**
-     * Handle a redirect to url
-     * @param $url
-     * @param array $params
-     */
-    public function return_redirect($url, $params = array())
-    {
-        $url .= '?' . http_build_query($params);
-        ob_clean();
-        header('Location: ' . $url);
-        die();
-    }
-
-    /**
-     * Handle a json response
-     * @param $data
-     */
-    public function return_json($data)
-    {
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        die;
-    }
-
-    // -----------------------------------------------------
-    // Helpers
     // -----------------------------------------------------
 
     /**
@@ -227,25 +192,46 @@ abstract class WP_AJAX
         return admin_url('/admin-ajax.php') . '?' . $params;
     }
 
-    /**
-     * @return bool
-     */
-    public function is_logged_in()
-    {
-        return is_user_logged_in();
-    }
+    // -----------------------------------------------------
+    // Helpers
+    // -----------------------------------------------------
 
     /**
-     * @param $key
+     * Handle a redirect back to referrer
      * @return bool
      */
-    public function has($key)
+    public function return_back_json()
     {
-        if (isset($this->request[$key])) {
-            return true;
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            die();
         }
 
         return false;
+    }
+
+    /**
+     * Handle a redirect to url
+     * @param $url
+     * @param array $params
+     */
+    public function return_redirect($url, $params = array())
+    {
+        $url .= '?' . http_build_query($params);
+        ob_clean();
+        header('Location: ' . $url);
+        die();
+    }
+
+    /**
+     * Handle a json response
+     * @param $data
+     */
+    public function return_json($data)
+    {
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        die;
     }
 
     /**
@@ -267,6 +253,19 @@ abstract class WP_AJAX
     }
 
     /**
+     * @param $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        if (isset($this->request[$key])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param null $request_type
      * @return bool|mixed
      */
@@ -282,4 +281,9 @@ abstract class WP_AJAX
 
         return $_SERVER['REQUEST_METHOD'];
     }
+
+    /**
+     * @return mixed
+     */
+    abstract protected function run();
 }

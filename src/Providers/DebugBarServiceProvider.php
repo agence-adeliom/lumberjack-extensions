@@ -2,17 +2,11 @@
 
 namespace Adeliom\WP\Extensions\Providers;
 
-use Psr\Http\Message\ResponseInterface;
-use Rareloop\Lumberjack\DebugBar\DebugBar;
 use Rareloop\Lumberjack\DebugBar\Responses\CssResponse;
 use Rareloop\Lumberjack\DebugBar\Responses\JavaScriptResponse;
 use Rareloop\Lumberjack\DebugBar\Twig\NodeVisitor;
-use Rareloop\Lumberjack\Facades\Config;
-use Rareloop\Lumberjack\Providers\ServiceProvider;
 use Rareloop\Router\Router;
 use Timber\Timber;
-use Zend\Diactoros\Response;
-use Zend\Diactoros\Response\HtmlResponse;
 
 /**
  * Class DebugBarServiceProvider
@@ -58,7 +52,6 @@ class DebugBarServiceProvider extends \Rareloop\Lumberjack\DebugBar\DebugBarServ
                     return new CssResponse($debugbar->getJavascriptRenderer()->getCssAssetsDump());
                 })->name('debugbar.css');
             });
-
         }
     }
 }

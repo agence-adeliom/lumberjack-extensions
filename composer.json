@@ -15,31 +15,12 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "advanced-custom-fields/advanced-custom-fields-pro",
-                "version": "5.8.12",
-                "type": "wordpress-muplugin",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://connect.advancedcustomfields.com/index.php?a=download&p=pro&k={%PLUGIN_ACF_KEY}&t={%VERSION}"
-                },
-                "require": {
-                    "composer/installers": "^1.4",
-                    "ffraenz/private-composer-installer": "^4.0"
-                }
-            }
-        },
-        {
-            "type": "path",
-            "url": "../adeliom-wp-cli",
-            "options": {
-                "symlink": true
-            }
+    "repositories": {
+        "adeliom-wp-cli": {
+            "type": "vcs",
+            "url": "https://adeliom:93ba9634b50f6531edf61140fba54fe1d7e93fc4@github.com/adeliom/wp-cli"
         }
-    ],
+    },
     "require": {
         "php": "^7.1",
         "blast/facades": "^1.0",
@@ -48,7 +29,6 @@
         "rareloop/lumberjack-validation": "*",
         "rareloop/lumberjack-debugbar": "*",
         "google/recaptcha": "^1.2",
-        "advanced-custom-fields/advanced-custom-fields-pro": "*",
         "roots/bedrock-disallow-indexing": "^2.0",
         "dugajean/wp-hook-annotations": "dev-master",
         "adeliom/wp-cli": "dev-master",

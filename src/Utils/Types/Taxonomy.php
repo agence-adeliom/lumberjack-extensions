@@ -13,10 +13,10 @@ class Taxonomy
      * @param array $taxonomies {
      *      An array of arrays for taxonomies, where the name of the taxonomy is the key of an array.
      *
-     *      @type string $name_singular  Singular name for taxonomy.
-     *      @type string $name_plural    Plural name for taxonomy.
-     *      @type array  $for_post_types The array of post types you want to register the taxonomy for.
-     *      @type array  $args           Arguments that get passed to taxonomy registration.
+     * @type string $name_singular Singular name for taxonomy.
+     * @type string $name_plural Plural name for taxonomy.
+     * @type array $for_post_types The array of post types you want to register the taxonomy for.
+     * @type array $args Arguments that get passed to taxonomy registration.
      * }
      */
     public static function register($taxonomies = [])
@@ -29,14 +29,47 @@ class Taxonomy
 
             // Defaults for taxonomy registration.
             $args = wp_parse_args($args['args'], [
-                'public'            => false,
-                'hierarchical'      => false,
-                'show_ui'           => true,
+                'public' => false,
+                'hierarchical' => false,
+                'show_ui' => true,
                 'show_admin_column' => true,
-                'show_tag_cloud'    => false,
+                'show_tag_cloud' => false,
             ]);
 
             register_taxonomy($taxonomy, $for_post_types, $args);
+        }
+    }
+
+    /**
+     * Adds missing arguments for taxonomy.
+     *
+     * @param array $args An array of arguments.
+     *
+     * @return mixed
+     * @since 2.2.0
+     *
+     */
+    private static function parse_args($args)
+    {
+        if (isset($args['name_singular']) && !isset($args['name_plural'])) {
+            $args['name_plural'] = $args['name_singular'];
+        }
+
+        return $args;
+    }
+
+    /**
+     * Registers extensions.
+     *
+     * @param string $taxonomy The taxonomy name.
+     * @param array $args Arguments for the taxonomy.
+     * @since 2.2.0
+     *
+     */
+    private static function register_extensions($taxonomy, $args)
+    {
+        if (isset($args['name_singular'])) {
+            (new Taxonomy_Labels($taxonomy, $args['name_singular'], $args['name_plural']))->init();
         }
     }
 
@@ -47,11 +80,11 @@ class Taxonomy
      *
      * Run this function before the `init` hook.
      *
-     * @see register_taxonomy()
-     * @since 2.2.0
-     *
      * @param array $taxonomies An associative array of post types and its arguments that should be updated. See the
      *                          `register()` function for all the arguments that you can use.
+     * @since 2.2.0
+     *
+     * @see register_taxonomy()
      */
     public static function update($taxonomies = [])
     {
@@ -78,51 +111,18 @@ class Taxonomy
      *
      * Run this function before the `init` hook.
      *
+     * @param string $taxonomy The taxonomy to rename.
+     * @param string $name_singular The new singular name.
+     * @param string $name_plural The new plural name.
      * @since 2.2.0
      *
-     * @param string $taxonomy      The taxonomy to rename.
-     * @param string $name_singular The new singular name.
-     * @param string $name_plural   The new plural name.
      */
     public static function rename($taxonomy, $name_singular, $name_plural)
     {
-        if (! taxonomy_exists($taxonomy)) {
+        if (!taxonomy_exists($taxonomy)) {
             return;
         }
 
-        ( new Taxonomy_Labels($taxonomy, $name_singular, $name_plural) )->init();
-    }
-
-    /**
-     * Adds missing arguments for taxonomy.
-     *
-     * @since 2.2.0
-     *
-     * @param array $args An array of arguments.
-     *
-     * @return mixed
-     */
-    private static function parse_args($args)
-    {
-        if (isset($args['name_singular']) && ! isset($args['name_plural'])) {
-            $args['name_plural'] = $args['name_singular'];
-        }
-
-        return $args;
-    }
-
-    /**
-     * Registers extensions.
-     *
-     * @since 2.2.0
-     *
-     * @param string $taxonomy The taxonomy name.
-     * @param array  $args      Arguments for the taxonomy.
-     */
-    private static function register_extensions($taxonomy, $args)
-    {
-        if (isset($args['name_singular'])) {
-            ( new Taxonomy_Labels($taxonomy, $args['name_singular'], $args['name_plural']) )->init();
-        }
+        (new Taxonomy_Labels($taxonomy, $name_singular, $name_plural))->init();
     }
 }

@@ -11,17 +11,10 @@ use Rareloop\Lumberjack\Post as BasePost;
 class Post extends BasePost
 {
 
-    protected static function getPostTypeCustomSlug()
-    {
-        return function ($post_slug, $post_data, $post_id) {
-            return $post_slug;
-        };
-    }
-
     public static function register()
     {
         $postType = static::getPostType();
-        $config = static::getPostTypeConfig();
+        $config   = static::getPostTypeConfig();
 
         if (empty($postType) || $postType === 'post') {
             throw new PostTypeRegistrationException('Post type not set');
@@ -31,7 +24,7 @@ class Post extends BasePost
             throw new PostTypeRegistrationException('Config not set');
         }
 
-        Post_Type::register([ $postType => $config ]);
+        Post_Type::register([$postType => $config]);
 
         self::customSlug(self::getPostTypeCustomSlug());
     }
@@ -49,5 +42,12 @@ class Post extends BasePost
         $post_slugs->register([
             $postType => $function
         ]);
+    }
+
+    protected static function getPostTypeCustomSlug()
+    {
+        return function ($post_slug, $post_data, $post_id) {
+            return $post_slug;
+        };
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Adeliom\WP\Extensions\Rules;
 
-use ReCaptcha\ReCaptcha;
 use Rakit\Validation\Rule;
 use Rareloop\Lumberjack\Config;
+use ReCaptcha\ReCaptcha;
 
 /**
  * Class RecaptchaRule

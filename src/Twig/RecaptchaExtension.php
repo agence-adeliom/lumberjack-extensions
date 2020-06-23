@@ -2,9 +2,9 @@
 
 namespace Adeliom\WP\Extensions\Twig;
 
-use Twig\TwigFunction;
 use Rareloop\Lumberjack\Config;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class RecaptchaExtension

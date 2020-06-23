@@ -3,10 +3,9 @@
 
 namespace Adeliom\WP\Extensions\Providers;
 
-use Dugajean\WpHookAnnotations\HookRegistry;
+use Brick\Event\EventDispatcher;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
-use Brick\Event\EventDispatcher;
 
 /**
  * Class EventServiceProvider

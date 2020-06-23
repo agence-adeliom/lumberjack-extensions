@@ -4,11 +4,10 @@
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Admin\AbstractAdmin;
-use Dugajean\WpHookAnnotations\HookRegistry;
-use HaydenPierce\ClassFinder\ClassFinder;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
-use Brick\Event\EventDispatcher;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class AdminServiceProvider
@@ -25,18 +24,18 @@ class AdminServiceProvider extends ServiceProvider
     {
         $adminPath = $this->app->basePath() . "/app/Admin";
 
-        foreach (glob($adminPath.'/*.php') as $file) {
+        foreach (glob($adminPath . '/*.php') as $file) {
             include($file);
         }
 
         foreach (get_declared_classes() as $class) {
             if (strpos($class, "App\Admin") !== false) {
                 try {
-                    $classMeta = new \ReflectionClass($class);
+                    $classMeta = new ReflectionClass($class);
                     if ($classMeta->isSubclassOf(AbstractAdmin::class)) {
                         $class::register();
                     }
-                } catch (\ReflectionException $e) {
+                } catch (ReflectionException $e) {
                 }
             }
         }

@@ -21,7 +21,7 @@ class Post_Slug
      */
     public function init()
     {
-        add_filter('wp_insert_post_data', [ $this, 'customize_slug' ], 11, 2);
+        add_filter('wp_insert_post_data', [$this, 'customize_slug'], 11, 2);
     }
 
     /**
@@ -32,7 +32,7 @@ class Post_Slug
     public function register($post_types = [])
     {
         foreach ($post_types as $post_type => $callback) {
-            $this->post_types[ $post_type ] = [
+            $this->post_types[$post_type] = [
                 'callback' => $callback,
             ];
         }
@@ -42,14 +42,14 @@ class Post_Slug
     /**
      * Customizes the post slug.
      *
-     * @param array $data    An array of slashed post data.
+     * @param array $data An array of slashed post data.
      * @param array $postarr An array of sanitized, but otherwise unmodified post data.
      *
      * @return array
      */
     public function customize_slug($data, $postarr)
     {
-        $bailout_states = [ 'auto-draft', 'trash' ];
+        $bailout_states = ['auto-draft', 'trash'];
         $post_status    = $postarr['post_status'];
 
         // Bailout if it’s not the right state.
@@ -60,8 +60,8 @@ class Post_Slug
         $post_type = $postarr['post_type'];
 
         // Bailout if no callback could be found.
-        if (! in_array($post_type, array_keys($this->post_types), true)
-            || ! is_callable($this->post_types[ $post_type ]['callback'])
+        if (!in_array($post_type, array_keys($this->post_types), true)
+            || !is_callable($this->post_types[$post_type]['callback'])
         ) {
             return $data;
         }
@@ -71,7 +71,7 @@ class Post_Slug
         $post_parent = $postarr['post_parent'];
 
         // Filter post slug through user-defined callback.
-        $post_slug = call_user_func($this->post_types[ $post_type ]['callback'], $post_slug, $postarr, $post_id);
+        $post_slug = call_user_func($this->post_types[$post_type]['callback'], $post_slug, $postarr, $post_id);
 
         // Make sure the post slug is sanitized and unique.
         $post_slug = sanitize_title($post_slug);

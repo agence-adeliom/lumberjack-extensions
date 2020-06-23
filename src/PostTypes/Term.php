@@ -3,12 +3,10 @@
 
 namespace Adeliom\WP\Extensions\PostTypes;
 
-use Adeliom\WP\Extensions\Utils\Types\Taxonomy ;
+use Adeliom\WP\Extensions\Utils\Types\Taxonomy;
 use Rareloop\Lumberjack\Exceptions\PostTypeRegistrationException;
 use Spatie\Macroable\Macroable;
 use Timber\Term as TimberTerm;
-use Timber\Timber;
-
 
 class Term extends TimberTerm
 {
@@ -28,22 +26,29 @@ class Term extends TimberTerm
         }
     }
 
-    public function __call($name, $arguments)
-    {
-        if (static::hasMacro($name)) {
-            return $this->__macroableCall($name, $arguments);
-        }
-
-        return parent::__call($name, $arguments);
-    }
-
     public static function __callStatic($name, $arguments)
     {
         if (static::hasMacro($name)) {
             return static::__macroableCallStatic($name, $arguments);
         }
 
-        trigger_error('Call to undefined method '.__CLASS__.'::'.$name.'()', E_USER_ERROR);
+        trigger_error('Call to undefined method ' . __CLASS__ . '::' . $name . '()', E_USER_ERROR);
+    }
+
+    public static function register()
+    {
+        $term   = static::getTerm();
+        $config = static::getTaxonomyConfig();
+
+        if (empty($term) || $term === 'category') {
+            throw new PostTypeRegistrationException('Term not set');
+        }
+
+        if (empty($config)) {
+            throw new PostTypeRegistrationException('Config not set');
+        }
+
+        Taxonomy::register([$term => $config]);
     }
 
     /**
@@ -70,20 +75,12 @@ class Term extends TimberTerm
         return null;
     }
 
-    public static function register()
+    public function __call($name, $arguments)
     {
-        $term = static::getTerm();
-        $config = static::getTaxonomyConfig();
-
-        if (empty($term) || $term === 'category') {
-            throw new PostTypeRegistrationException('Term not set');
+        if (static::hasMacro($name)) {
+            return $this->__macroableCall($name, $arguments);
         }
 
-        if (empty($config)) {
-            throw new PostTypeRegistrationException('Config not set');
-        }
-
-        Taxonomy::register([ $term => $config ]);
+        return parent::__call($name, $arguments);
     }
-
 }
