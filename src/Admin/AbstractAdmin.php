@@ -30,11 +30,16 @@ abstract class AbstractAdmin
             'style' => static::getStyle(),
             'fields' => iterator_to_array(static::getFields()),
             'location' => iterator_to_array(static::getLocation()),
+            'position' => static::getPosition(),
+            'label_placement' => static::getLabelPlacement(),
+            'instruction_placement' => static::getInstructionPlacement(),
+            'hide_on_screen' => static::getHideOnScreen(),
+            'menu_order' => static::getMenuOrder(),
         ]);
     }
 
     /**
-     * Get the admin title
+     * Visible in metabox handle
      * @return string
      */
     abstract public static function getTitle(): string;
@@ -46,6 +51,51 @@ abstract class AbstractAdmin
     public static function getStyle(): string
     {
         return "seamless";
+    }
+
+    /**
+     * Determines the position on the edit screen. Defaults to acf_after_title. Choices of 'acf_after_title', 'normal' or 'side'
+     * @return string
+     */
+    public static function getPosition(): string
+    {
+        return "acf_after_title";
+    }
+
+    /**
+     * Determines where field labels are places in relation to fields. Defaults to 'top'. Choices of 'top' (Above fields) or 'left' (Beside fields)
+     * @return string
+     */
+    public static function getLabelPlacement(): string
+    {
+        return "top";
+    }
+
+    /**
+     * Determines where field instructions are places in relation to fields. Defaults to 'label'. Choices of 'label' (Below labels) or 'field' (Below fields)
+     * @return string
+     */
+    public static function getInstructionPlacement(): string
+    {
+        return "label";
+    }
+
+    /**
+     * An array of elements to hide on the screen
+     * @return array
+     */
+    public static function getHideOnScreen(): array
+    {
+        return [];
+    }
+
+    /**
+     * Field groups are shown in order from lowest to highest. Defaults to 0
+     * @return int
+     */
+    public static function getMenuOrder(): int
+    {
+        return 0;
     }
 
     /**
@@ -70,13 +120,13 @@ abstract class AbstractAdmin
     }
 
     /**
-     * Get the admin fields list
+     * An list of fields
      * @return Traversable
      */
     abstract public static function getFields(): Traversable;
 
     /**
-     * Get the admin location list
+     * An list containing 'rule groups' where each 'rule group' is an array containing 'rules'. Each group is considered an 'or', and each rule is considered an 'and'.
      * @return Traversable
      */
     abstract public static function getLocation(): Traversable;
