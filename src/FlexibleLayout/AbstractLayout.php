@@ -22,9 +22,8 @@ abstract class AbstractLayout
     public static function make(string $title = null, string $key = null, string $type = null)
     {
         $title = $title ?? static::getTitle();
-        $key   = $key ?? static::getKey();
+        $key   = "flex_" . (!is_null($key) ? $key : static::getKey());
         $type  = $type ?? static::getType();
-
         return Layout::make($title, $key ?? null)->layout($type)->fields(iterator_to_array(static::getFields()));
     }
 
@@ -52,7 +51,7 @@ abstract class AbstractLayout
      */
     public static function getType(): string
     {
-        return "block";
+        return "row";
     }
 
     /**

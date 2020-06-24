@@ -38,7 +38,12 @@
         "phpoption/phpoption": "^1.7",
         "brick/event": "^0.1",
         "haydenpierce/class-finder": "^0.4",
-        "djboris88/timber-debugger": "^1.1"
+        "djboris88/timber-debugger": "^1.1",
+        "aaronadal/twig-list-loop": "^1.1",
+        "neemzy/share-extension": "^1.0",
+        "dpolac/twig-lambda": "^1.0",
+        "laravel/helpers": "^1.2",
+        "umpirsky/twig-php-function": "^0.2"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
@@ -47,7 +52,12 @@
     "autoload": {
         "psr-4": {
             "Adeliom\\WP\\Extensions\\": "src"
-        }
+        },
+        "files": [
+            "../../rareloop/lumberjack-core/src/functions.php",
+            "../../laravel/helpers/src/helpers.php",
+            "src/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

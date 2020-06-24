@@ -4,6 +4,7 @@
 namespace Adeliom\WP\Extensions\Admin;
 
 use Traversable;
+use function Sober\Intervention\intervention;
 
 /**
  * Class AbstractAdmin
@@ -17,6 +18,13 @@ abstract class AbstractAdmin
      */
     public static function register(): void
     {
+        if(self::hasOptionPage()){
+            $options = self::setupOptionPage();
+            if(function_exists("intervention")){
+                intervention('add-acf-page', $options["settings"], $options["roles"]);
+            }
+        }
+
         register_extended_field_group([
             'title' => static::getTitle(),
             'style' => static::getStyle(),
@@ -38,6 +46,27 @@ abstract class AbstractAdmin
     public static function getStyle(): string
     {
         return "seamless";
+    }
+
+    /**
+     * Register has option page
+     * @return bool
+     */
+    public static function hasOptionPage(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Register option page settings
+     * @return array
+     */
+    public static function setupOptionPage(): array
+    {
+        return [
+            "settings" => "Options",
+            "roles" => ['admin', 'editor']
+        ];
     }
 
     /**

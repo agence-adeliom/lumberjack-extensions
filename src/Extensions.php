@@ -12,7 +12,10 @@ use Adeliom\WP\Extensions\Providers\EventServiceProvider;
 use Adeliom\WP\Extensions\Providers\HookServiceProvider;
 use Adeliom\WP\Extensions\Providers\InterventionServiceProvider;
 use Adeliom\WP\Extensions\Providers\RecaptchaServiceProvider;
+use Adeliom\WP\Extensions\Providers\TwigExtensionsServiceProvider;
 use Adeliom\WP\Extensions\Providers\ValidationServiceProvider;
+use Neemzy\Twig\Extension\Share\ShareExtension;
+use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 
 /**
@@ -36,7 +39,8 @@ class Extensions extends ServiceProvider
         InterventionServiceProvider::class,
         HookServiceProvider::class,
         EventServiceProvider::class,
-        AdminServiceProvider::class
+        AdminServiceProvider::class,
+        TwigExtensionsServiceProvider::class
     ];
 
     /**
@@ -48,4 +52,5 @@ class Extensions extends ServiceProvider
             $this->app->register($provider);
         }
     }
+
 }
