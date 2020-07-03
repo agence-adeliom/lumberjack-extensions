@@ -26,7 +26,7 @@ class Post extends BasePost
 
         Post_Type::register([$postType => $config]);
 
-        self::customSlug(self::getPostTypeCustomSlug());
+        self::customSlug(static::getPostTypeCustomSlug());
     }
 
     /**

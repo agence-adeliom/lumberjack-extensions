@@ -18,9 +18,9 @@ abstract class AbstractAdmin
      */
     public static function register(): void
     {
-        if(self::hasOptionPage()){
-            $options = self::setupOptionPage();
-            if(function_exists("intervention")){
+        if(static::hasOptionPage()){
+            $options = static::setupOptionPage();
+            if(function_exists("Sober\Intervention\intervention")){
                 intervention('add-acf-page', $options["settings"], $options["roles"]);
             }
         }
