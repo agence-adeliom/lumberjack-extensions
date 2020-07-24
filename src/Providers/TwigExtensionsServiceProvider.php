@@ -6,6 +6,9 @@ use Dugajean\WpHookAnnotations\HookRegistry;
 use Neemzy\Twig\Extension\Share\ShareExtension;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
+use HelloNico\Twig\DumpExtension;
+use Ajgl\Twig\Extension\BreakpointExtension;
+use Djboris88\Twig\Extension\CommentedIncludeExtension;
 
 /**
  * Class TwigExtensionsServiceProvider
@@ -25,27 +28,31 @@ class TwigExtensionsServiceProvider extends ServiceProvider
 
             $phpFunctions = array_merge([
                 "mix",
-                "mix_any",
-                "camel_case",
-                "kebab_case",
-                "snake_case",
-                "ends_with",
-                "starts_with",
-                "str_contains",
-                "str_is",
-                "str_limit",
-                "str_random",
-                "str_slug",
-                "studly_case",
-                "title_case",
+                "mix_any"
             ], $functionsToRegister ?? []);
 
             $twig->addExtension(new \Umpirsky\Twig\Extension\PhpFunctionExtension($phpFunctions));
             $twig->addExtension(new \DPolac\TwigLambda\LambdaExtension());
             $twig->addExtension(new \Aaronadal\TwigListLoop\Twig\TwigExtension());
 
+            if (defined("WP_DEBUG") && WP_DEBUG) {
+                $twig->addExtension(new CommentedIncludeExtension());
+                $twig->addExtension(new DumpExtension());
+                $twig->addExtension(new BreakpointExtension());
+            }
+
             return $twig;
         });
+
+        if (defined("WP_DEBUG") && WP_DEBUG) {
+            /**
+             * Adding a second filter to cover the `Timber::render()` case, when the
+             * template is not loaded through the `include` tag inside a twig file
+             */
+            add_filter( 'timber/output', function( $output, $data, $file ) {
+                return "\n<!-- Begin output of '" . $file . "' -->\n" . $output . "\n<!-- / End output of '" . $file . "' -->\n";
+            }, 10, 3 );
+        }
 
         $extensionsToRegister = $config->get('twig.extensions');
         if (is_array($extensionsToRegister)) {

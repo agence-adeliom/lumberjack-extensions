@@ -42,8 +42,8 @@
         "aaronadal/twig-list-loop": "^1.1",
         "neemzy/share-extension": "^1.0",
         "dpolac/twig-lambda": "^1.0",
-        "laravel/helpers": "^1.2",
-        "umpirsky/twig-php-function": "^0.2"
+        "umpirsky/twig-php-function": "^0.2",
+        "jawira/case-converter": "^3.4"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
@@ -55,7 +55,6 @@
         },
         "files": [
             "../../rareloop/lumberjack-core/src/functions.php",
-            "../../laravel/helpers/src/helpers.php",
             "src/functions.php"
         ]
     },

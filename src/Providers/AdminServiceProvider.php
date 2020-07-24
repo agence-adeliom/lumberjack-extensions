@@ -24,7 +24,7 @@ class AdminServiceProvider extends ServiceProvider
     {
         $adminPath = $this->app->basePath() . "/app/Admin";
 
-        foreach (glob($adminPath . '/*.php') as $file) {
+        foreach ($this->getDirContents($adminPath) as $file) {
             include($file);
         }
 
@@ -40,4 +40,17 @@ class AdminServiceProvider extends ServiceProvider
             }
         }
     }
+
+    private function getDirContents($path) {
+        $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        $php_files = new RegexIterator($rii, '/\.php$/');
+
+        $files = array(); 
+        foreach ($rii as $file)
+            if (!$file->isDir())
+                $files[] = $file->getPathname();
+    
+        return $files;
+    }
+
 }
