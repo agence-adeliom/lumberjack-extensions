@@ -43,7 +43,7 @@ class AdminServiceProvider extends ServiceProvider
 
     private function getDirContents($path) {
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        $php_files = new RegexIterator($rii, '/\.php$/');
+        $php_files = new \RegexIterator($rii, '/\.php$/');
 
         $files = array(); 
         foreach ($rii as $file)
