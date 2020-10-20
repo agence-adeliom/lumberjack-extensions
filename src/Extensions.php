@@ -3,14 +3,12 @@
 namespace Adeliom\WP\Extensions;
 
 use Adeliom\WP\Extensions\Providers\AdminServiceProvider;
-use Adeliom\WP\Extensions\Providers\AjaxServiceProvider;
 use Adeliom\WP\Extensions\Providers\CronServiceProvider;
 use Adeliom\WP\Extensions\Providers\CustomTaxonomyServiceProvider;
 use Adeliom\WP\Extensions\Providers\DebugBarServiceProvider;
 use Adeliom\WP\Extensions\Providers\EmailServiceProvider;
 use Adeliom\WP\Extensions\Providers\EventServiceProvider;
 use Adeliom\WP\Extensions\Providers\HookServiceProvider;
-use Adeliom\WP\Extensions\Providers\InterventionServiceProvider;
 use Adeliom\WP\Extensions\Providers\RecaptchaServiceProvider;
 use Adeliom\WP\Extensions\Providers\TwigExtensionsServiceProvider;
 use Adeliom\WP\Extensions\Providers\ValidationServiceProvider;
@@ -33,10 +31,8 @@ class Extensions extends ServiceProvider
         ValidationServiceProvider::class,
         RecaptchaServiceProvider::class,
         DebugBarServiceProvider::class,
-        AjaxServiceProvider::class,
         CronServiceProvider::class,
         CustomTaxonomyServiceProvider::class,
-        InterventionServiceProvider::class,
         HookServiceProvider::class,
         EventServiceProvider::class,
         AdminServiceProvider::class,
