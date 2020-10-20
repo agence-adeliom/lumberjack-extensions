@@ -24,7 +24,7 @@
     "require": {
         "php": "^7.1",
         "blast/facades": "^1.0",
-        "rareloop/lumberjack-core": "^4.4",
+        "rareloop/lumberjack-core": "^4.3",
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
         "rareloop/lumberjack-debugbar": "*",
@@ -33,6 +33,7 @@
         "dugajean/wp-hook-annotations": "dev-master",
         "adeliom/wp-cli": "dev-master",
         "wp-cli/wp-cli-bundle": "*",
+        "soberwp/intervention": "*",
         "wordplate/acf": "*",
         "phpoption/phpoption": "^1.7",
         "brick/event": "^0.1",
