@@ -37,7 +37,7 @@
         "wordplate/acf": "*",
         "phpoption/phpoption": "^1.7",
         "brick/event": "^0.1",
-        "djboris88/timber-debugger": "^1.1",
+        "djboris88/timber-debugger": "*",
         "aaronadal/twig-list-loop": "^1.1",
         "neemzy/share-extension": "^1.0",
         "dpolac/twig-lambda": "^1.0",
