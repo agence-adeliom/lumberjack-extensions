@@ -37,7 +37,6 @@
         "wordplate/acf": "*",
         "phpoption/phpoption": "^1.7",
         "brick/event": "^0.1",
-        "haydenpierce/class-finder": "^0.4",
         "djboris88/timber-debugger": "^1.1",
         "aaronadal/twig-list-loop": "^1.1",
         "neemzy/share-extension": "^1.0",
