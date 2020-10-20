@@ -28,5 +28,5 @@ abstract class AbstractEvent
      * The event function
      * @return void
      */
-    abstract public static function handle($args = []): void;
+    abstract public static function handle(): void;
 }
