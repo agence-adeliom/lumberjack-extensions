@@ -27,7 +27,6 @@
         "rareloop/lumberjack-core": "*",
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
-        "rareloop/lumberjack-debugbar": "*",
         "google/recaptcha": "^1.2",
         "roots/bedrock-disallow-indexing": "^2.0",
         "dugajean/wp-hook-annotations": "dev-master",
