@@ -28,7 +28,7 @@ class AbstractBlock extends Block implements InitializableInterface
         return class_exists("Timber");
     }
 
-    public function renderBlockCallback(array $block): void
+    public function renderBlockCallback(array $block, string $content = '', bool $is_preview = false, int $post_id = 0): void
     {
         $frontend = apply_filters(
             'acf_gutenblocks/render_block_frontend_path',
@@ -56,6 +56,9 @@ class AbstractBlock extends Block implements InitializableInterface
 
         $context = Timber::context();
         $context['controller'] = $controller;
+        $context['post_id'] = $post_id;
+        $context['is_preview'] = $is_preview;
+        $context['content'] = $content;
         $context['block'] = $block;
         $context['fields'] = $this->with();
 

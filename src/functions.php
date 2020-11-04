@@ -16,11 +16,16 @@
  *
  * @return string The versioned file URL.
  */
-function mix( $path, $manifest_directory = '' ) {
+function mix( $path, $manifest_directory = 'build' ) {
     static $manifest;
     static $manifest_path;
 
     if ( ! $manifest_path ) {
+        $manifest_path = get_theme_file_path( $manifest_directory . '/mix-manifest.json' );
+    }
+
+    // Bailout if manifest couldn’t be found
+    if ( ! file_exists( $manifest_path ) ) {
         $manifest_path = get_theme_file_path( $manifest_directory . '/mix-manifest.json' );
     }
 

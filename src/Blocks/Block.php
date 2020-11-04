@@ -103,6 +103,15 @@ class Block
      */
     protected $enabled = true;
 
+
+    /**
+     * The blocks assets.
+     *
+     * @since 0.1.0
+     */
+    public $assets;
+
+
     /**
      * Begin block construction!
      *
@@ -119,6 +128,7 @@ class Block
 
         // User definitions.
         $this->enabled = $settings['enabled'] ?? true;
+        $this->assets = $settings['enqueue_assets'] ?? null;
         $this->dir     = $settings['dir'] ?? $directory_path;
         $this->icon    = $settings['icon'] ?? apply_filters('acf_gutenblocks/default_icon', 'admin-generic');
 
@@ -304,6 +314,7 @@ class Block
             'mode' => $this->getMode(),
             'align' => $this->getAlignment(),
             'supports' => $this->getSupports(),
+            'enqueue_assets' => $this->assets,
         ];
     }
 
@@ -316,7 +327,6 @@ class Block
             $fields                        = $this->getFields();
 
             acf_register_block_type($block_data);
-
             if (!empty($fields)) {
                 $acf        = [
                     'title' => "Block - " . static::getTitle(),
