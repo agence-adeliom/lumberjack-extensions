@@ -50,4 +50,39 @@ class Post extends BasePost
             return $post_slug;
         };
     }
+    public static function paginate($perPage = 10, $args = [])
+    {
+        global $paged;
+
+        if (!isset($paged) || !$paged) {
+            $paged = 1;
+        }
+        $args = array_merge($args, [
+            'posts_per_page' => $perPage,
+            'paged' => $paged
+        ]);
+
+        // Pagination requires wordpress's query_posts method instead of Timber's.
+        query_posts($args);
+
+        return static::query($args);
+    }
+
+    public function __isset($field)
+    {
+        if(!empty(get_field($field, $this->ID))){
+            return true;
+        }
+
+        return parent::__isset($field);
+    }
+
+    public function __get($field)
+    {
+        if(!empty(get_field($field, $this->ID))){
+            return get_field($field, $this->ID);
+        }
+
+        return parent::__get($field);
+    }
 }

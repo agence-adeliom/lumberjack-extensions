@@ -83,4 +83,26 @@ class Term extends TimberTerm
 
         return parent::__call($name, $arguments);
     }
+
+    public function __isset($field)
+    {
+        $term   = static::getTerm();
+
+        if(!empty(get_field($field, $term . "_" . $this->term_id))){
+            return true;
+        }
+
+        return parent::__isset($field);
+    }
+
+    public function __get($field)
+    {
+        $term   = static::getTerm();
+
+        if(!empty(get_field($field, $term . "_" . $this->term_id))){
+            return get_field($field, $term . "_" . $this->term_id);
+        }
+
+        return parent::__get($field);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Adeliom\WP\Extensions;
 
 use Adeliom\WP\Extensions\Providers\AdminServiceProvider;
+use Adeliom\WP\Extensions\Providers\BlocksServiceProvider;
 use Adeliom\WP\Extensions\Providers\CronServiceProvider;
 use Adeliom\WP\Extensions\Providers\CustomTaxonomyServiceProvider;
 use Adeliom\WP\Extensions\Providers\EmailServiceProvider;
@@ -36,6 +37,7 @@ class Extensions extends ServiceProvider
         HookServiceProvider::class,
         EventServiceProvider::class,
         AdminServiceProvider::class,
+        BlocksServiceProvider::class,
         TwigExtensionsServiceProvider::class
     ];
 
