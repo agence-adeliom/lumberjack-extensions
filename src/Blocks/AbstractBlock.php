@@ -6,11 +6,16 @@ use Timber\Timber;
 
 class AbstractBlock extends Block implements InitializableInterface
 {
+    public $template = "";
+
     public function __construct(array $settings)
     {
         parent::__construct($settings);
 
         $this->dir = $settings['dir'] ?? "views/blocks";
+        $tpl = $this->name;
+        $tpl = str_replace("-block", "", $tpl);
+        $this->template = "{$this->dir}/{$tpl}{$this->fileExtension()}";
     }
 
     public function fileExtension(): string
@@ -27,7 +32,7 @@ class AbstractBlock extends Block implements InitializableInterface
     {
         $frontend = apply_filters(
             'acf_gutenblocks/render_block_frontend_path',
-            "{$this->dir}/{$this->name}{$this->fileExtension()}",
+            $this->template,
             $this
         );
 
@@ -36,7 +41,6 @@ class AbstractBlock extends Block implements InitializableInterface
         } else {
             $path = locate_template($frontend);
         }
-
         if (empty($path)) {
             return;
         }
