@@ -25,6 +25,10 @@ class BlocksServiceProvider extends ServiceProvider
     {
         $adminPath = $this->app->basePath() . "/app/Blocks";
 
+        if(!file_exists($adminPath)){
+            return;
+        }
+
         foreach ($this->getDirContents($adminPath) as $file) {
             include($file);
         }
