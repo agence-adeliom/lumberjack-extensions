@@ -31,7 +31,7 @@ function mix( $path, $manifest_directory = 'build' ) {
 
     // Bailout if manifest couldn’t be found
     if ( ! file_exists( $manifest_path ) ) {
-        return get_theme_file_uri( $path );
+        return get_theme_file_uri( $manifest_directory . $path );
     }
 
     if ( ! $manifest ) {
@@ -46,7 +46,7 @@ function mix( $path, $manifest_directory = 'build' ) {
 
     // Bailout with default theme path if file could not be found in manifest
     if ( ! array_key_exists( $path, $manifest ) ) {
-        return get_theme_file_uri( $path );
+        return get_theme_file_uri( $manifest_directory . $path );
     }
 
     // Get file URL from manifest file
