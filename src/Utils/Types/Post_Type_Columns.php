@@ -206,7 +206,7 @@ class Post_Type_Columns
          * The search parameter needs to be removed from the query, because it will prevent
          * the proper posts from being found.
          */
-        $query->set('s', '');
+        //$query->set('s', '');
 
         $query->set('meta_query', $meta_query);
     }
