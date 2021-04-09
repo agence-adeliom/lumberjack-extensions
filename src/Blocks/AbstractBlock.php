@@ -36,11 +36,11 @@ class AbstractBlock extends Block implements InitializableInterface
             $this
         );
 
-        if (file_exists($frontend)) {
-            $path = $frontend;
-        } else {
-            $path = locate_template($frontend);
-        }
+        //if (file_exists($frontend)) {
+        //    $path = $frontend;
+        //} else {
+        //    $path = locate_template($frontend);
+        //}
         if (empty($path)) {
             return;
         }
