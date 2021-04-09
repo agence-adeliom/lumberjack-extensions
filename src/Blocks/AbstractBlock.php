@@ -63,6 +63,6 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['fields'] = $this->with();
 
 
-        Timber::render($path, $context);
+        Timber::render($frontend, $context);
     }
 }
