@@ -80,12 +80,36 @@ class Block
     protected $align = '';
 
     /**
+     * The block alignment class.
+     *
+     * @since 0.1.0
+     * @var string $align_text
+     */
+    protected $align_text = '';
+
+    /**
+     * The block alignment class.
+     *
+     * @since 0.1.0
+     * @var string $align_content
+     */
+    protected $align_content = '';
+
+    /**
      * Features supported by the block.
      *
      * @since 0.1.0
      * @var array $supports
      */
     protected $supports = [];
+
+    /**
+     * Preview example.
+     *
+     * @since 0.1.0
+     * @var array $example
+     */
+    protected $example = [];
 
     /**
      * The blocks directory path.
@@ -131,6 +155,12 @@ class Block
         $this->assets = $settings['enqueue_assets'] ?? null;
         $this->dir     = $settings['dir'] ?? $directory_path;
         $this->icon    = $settings['icon'] ?? apply_filters('acf_gutenblocks/default_icon', 'admin-generic');
+        $this->mode    = $settings['mode'] ?? $this->getMode();
+        $this->example    = $settings['example'] ?? $this->getExample();
+        $this->supports    = $settings['supports'] ?? $this->getSupports();
+        $this->align    = $settings['align'] ?? $this->getAlignment();
+        $this->align_content    = $settings['align_content'] ?? $this->getAlignmentContent();
+        $this->align_text    = $settings['align_text'] ?? $this->getAlignmentText();
 
         $settings = apply_filters('acf_gutenblocks/block_settings', [
             'title'       => $settings['title'],
@@ -145,7 +175,6 @@ class Block
         $this->description = $settings['description'];
         $this->category    = $settings['category'];
         $this->icon        = $settings['icon'];
-        $this->supports    = $settings['supports'];
         $this->post_types  = $settings['post_types'];
 
         // Set ACF Fields to the block.
@@ -285,6 +314,28 @@ class Block
     }
 
     /**
+     * Get the text alignment
+     *
+     * @since 0.1.0
+     * @return string
+     */
+    public function getAlignmentText(): string
+    {
+        return $this->align_text;
+    }
+
+    /**
+     * Get the content alignment
+     *
+     * @since 0.1.0
+     * @return string
+     */
+    public function getAlignmentContent(): string
+    {
+        return $this->align_content;
+    }
+
+    /**
      * Get featured supported by the block
      *
      * @since 0.1.0
@@ -293,6 +344,17 @@ class Block
     public function getSupports(): array
     {
         return $this->supports;
+    }
+
+    /**
+     * Get example for preview
+     *
+     * @since 0.1.0
+     * @return array
+     */
+    public function getExample(): array
+    {
+        return $this->example;
     }
 
     /**
@@ -312,7 +374,10 @@ class Block
             'keywords' => $this->getKeywords(),
             'post_types' => $this->getPostTypes(),
             'mode' => $this->getMode(),
+            'example' => $this->getExample(),
             'align' => $this->getAlignment(),
+            'align_text' => $this->getAlignmentText(),
+            'align_content' => $this->getAlignmentContent(),
             'supports' => $this->getSupports(),
             'enqueue_assets' => $this->assets,
         ];

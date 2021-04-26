@@ -30,7 +30,10 @@ class BlocksServiceProvider extends ServiceProvider
         }
 
         foreach ($this->getDirContents($adminPath) as $file) {
-            include($file);
+            $info = pathinfo($file);
+            if($info['extension'] === "php") {
+                include($file);
+            }
         }
 
         foreach (get_declared_classes() as $class) {
