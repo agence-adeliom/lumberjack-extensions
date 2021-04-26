@@ -101,7 +101,13 @@ class Block
      * @since 0.1.0
      * @var array $supports
      */
-    protected $supports = [];
+    protected $supports = [
+        'multiple' => false,
+        'align' => false,
+        'align_text' => false,
+        'align_content' => false,
+        'jsx' => false
+    ];
 
     /**
      * Preview example.
@@ -157,10 +163,10 @@ class Block
         $this->icon    = $settings['icon'] ?? apply_filters('acf_gutenblocks/default_icon', 'admin-generic');
         $this->mode    = $settings['mode'] ?? $this->getMode();
         $this->example    = $settings['example'] ?? $this->getExample();
-        $this->supports    = $settings['supports'] ?? $this->getSupports();
         $this->align    = $settings['align'] ?? $this->getAlignment();
         $this->align_content    = $settings['align_content'] ?? $this->getAlignmentContent();
         $this->align_text    = $settings['align_text'] ?? $this->getAlignmentText();
+        $this->supports    = $settings['supports'] && is_array($settings['supports']) ? array_merge($settings['supports'], $this->getSupports()) : $this->getSupports();
 
         $settings = apply_filters('acf_gutenblocks/block_settings', [
             'title'       => $settings['title'],
