@@ -1,10 +1,7 @@
 <?php
 namespace Adeliom\WP\Extensions\Blocks;
-
-
 use WordPlate\Acf\FieldGroup;
 use WordPlate\Acf\Location;
-
 class Block
 {
     /**
@@ -14,7 +11,6 @@ class Block
      * @var string $name
      */
     protected $name = '';
-
     /**
      * The display name of the block.
      *
@@ -22,7 +18,6 @@ class Block
      * @var string $title
      */
     protected $title = '';
-
     /**
      * The description of the block.
      *
@@ -30,7 +25,6 @@ class Block
      * @var string $description
      */
     protected $description;
-
     /**
      * The category this block belongs to.
      *
@@ -38,7 +32,6 @@ class Block
      * @var string $category
      */
     protected $category;
-
     /**
      * The icon of this block.
      *
@@ -46,7 +39,6 @@ class Block
      * @var string $icon
      */
     protected $icon = '';
-
     /**
      * An array of keywords the block will be found under.
      *
@@ -54,7 +46,6 @@ class Block
      * @var array $keywords
      */
     protected $keywords = [];
-
     /**
      * An array of Post Types the block will be available to.
      *
@@ -62,7 +53,6 @@ class Block
      * @var array $post_types
      */
     protected $post_types = ['post', 'page'];
-
     /**
      * The default display mode of the block that is shown to the user.
      *
@@ -70,7 +60,6 @@ class Block
      * @var string $mode
      */
     protected $mode = 'preview';
-
     /**
      * The block alignment class.
      *
@@ -78,7 +67,6 @@ class Block
      * @var string $align
      */
     protected $align = '';
-
     /**
      * The block alignment class.
      *
@@ -86,7 +74,6 @@ class Block
      * @var string $align_text
      */
     protected $align_text = '';
-
     /**
      * The block alignment class.
      *
@@ -94,7 +81,6 @@ class Block
      * @var string $align_content
      */
     protected $align_content = '';
-
     /**
      * Features supported by the block.
      *
@@ -102,21 +88,28 @@ class Block
      * @var array $supports
      */
     protected $supports = [
-        'multiple' => false,
+        'multiple' => true,
         'align' => false,
         'align_text' => false,
         'align_content' => false,
         'jsx' => false
     ];
-
     /**
      * Preview example.
      *
      * @since 0.1.0
      * @var array $example
      */
-    protected $example = [];
-
+    protected $example = [
+        'attributes' => [
+            'mode' => 'preview',
+            'data' => [
+                "content" => [
+                    'is_preview' => true
+                ]
+            ]
+        ]
+    ];
     /**
      * The blocks directory path.
      *
@@ -124,7 +117,6 @@ class Block
      * @var string $dir
      */
     public $dir;
-
     /**
      * The blocks accessibility.
      *
@@ -132,16 +124,12 @@ class Block
      * @var boolean $enabled
      */
     protected $enabled = true;
-
-
     /**
      * The blocks assets.
      *
      * @since 0.1.0
      */
     public $assets;
-
-
     /**
      * Begin block construction!
      *
@@ -155,7 +143,6 @@ class Block
         $block_path     = $reflection->getFileName();
         $directory_path = dirname($block_path);
         $this->name     = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', basename($block_path, '.php')));
-
         // User definitions.
         $this->enabled = $settings['enabled'] ?? true;
         $this->assets = $settings['enqueue_assets'] ?? null;
@@ -167,7 +154,6 @@ class Block
         $this->align_content    = $settings['align_content'] ?? $this->getAlignmentContent();
         $this->align_text    = $settings['align_text'] ?? $this->getAlignmentText();
         $this->supports    = $settings['supports'] && is_array($settings['supports']) ? array_merge($settings['supports'], $this->getSupports()) : $this->getSupports();
-
         $settings = apply_filters('acf_gutenblocks/block_settings', [
             'title'       => $settings['title'],
             'description' => $settings['description'],
@@ -176,17 +162,14 @@ class Block
             'supports'    => $this->supports,
             'post_types'  => $settings['post_types'] ?? $this->post_types,
         ], $this->name);
-
         $this->title       = $settings['title'];
         $this->description = $settings['description'];
         $this->category    = $settings['category'];
         $this->icon        = $settings['icon'];
         $this->post_types  = $settings['post_types'];
-
         // Set ACF Fields to the block.
         $this->fields = $this->registerFields();
     }
-
     /**
      * Is the block enabled?
      *
@@ -197,7 +180,6 @@ class Block
     {
         return $this->enabled;
     }
-
     /**
      * User defined ACF fields
      *
@@ -208,7 +190,6 @@ class Block
     {
         return [];
     }
-
     /**
      * Get the block ACF fields
      *
@@ -219,7 +200,6 @@ class Block
     {
         return iterator_to_array($this->fields);
     }
-
     /**
      * Get the block name
      *
@@ -230,7 +210,6 @@ class Block
     {
         return $this->name;
     }
-
     /**
      * Get the block title
      *
@@ -241,7 +220,6 @@ class Block
     {
         return $this->title;
     }
-
     /**
      * Get the block description
      *
@@ -252,7 +230,6 @@ class Block
     {
         return $this->description;
     }
-
     /**
      * Get the block category
      *
@@ -263,7 +240,6 @@ class Block
     {
         return $this->category;
     }
-
     /**
      * Get the block icon
      *
@@ -274,7 +250,6 @@ class Block
     {
         return $this->icon;
     }
-
     /**
      * Get the block keywords
      *
@@ -285,7 +260,6 @@ class Block
     {
         return $this->keywords;
     }
-
     /**
      * Get the block post types
      *
@@ -296,7 +270,6 @@ class Block
     {
         return $this->post_types;
     }
-
     /**
      * Get the block mode
      *
@@ -307,7 +280,6 @@ class Block
     {
         return $this->mode;
     }
-
     /**
      * Get the block alignment
      *
@@ -318,7 +290,6 @@ class Block
     {
         return $this->align;
     }
-
     /**
      * Get the text alignment
      *
@@ -329,7 +300,6 @@ class Block
     {
         return $this->align_text;
     }
-
     /**
      * Get the content alignment
      *
@@ -340,7 +310,6 @@ class Block
     {
         return $this->align_content;
     }
-
     /**
      * Get featured supported by the block
      *
@@ -351,7 +320,6 @@ class Block
     {
         return $this->supports;
     }
-
     /**
      * Get example for preview
      *
@@ -362,7 +330,6 @@ class Block
     {
         return $this->example;
     }
-
     /**
      * Get the block registration data
      *
@@ -388,15 +355,12 @@ class Block
             'enqueue_assets' => $this->assets,
         ];
     }
-
-
     public function init(): void
     {
         if( function_exists('acf_register_block_type') ) {
             $block_data                    = $this->getBlockData();
             $block_data['render_callback'] = [$this, 'renderBlockCallback'];
             $fields                        = $this->getFields();
-
             acf_register_block_type($block_data);
             if (!empty($fields)) {
                 $acf        = [
