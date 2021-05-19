@@ -24,7 +24,7 @@ class TwigExtensionsServiceProvider extends ServiceProvider
     {
         add_filter('timber/twig', function ($twig) use ($config) {
             $functionsToRegister = $config->get('twig.allowed_functions');
-            $twig->addExtension(ShareExtension::getInstance());
+            //$twig->addExtension(ShareExtension::getInstance());
 
             $phpFunctions = array_merge([
                 "mix",

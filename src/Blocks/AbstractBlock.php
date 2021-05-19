@@ -38,20 +38,11 @@ class AbstractBlock extends Block implements InitializableInterface
 
     public function renderBlockCallback(array $block, string $content = '', bool $is_preview = false, int $post_id = 0): void
     {
-        $frontend = apply_filters(
+        $path = apply_filters(
             'acf_gutenblocks/render_block_frontend_path',
             $this->template,
             $this
         );
-
-        if (file_exists($frontend)) {
-            $path = $frontend;
-        } else {
-            $path = locate_template($frontend);
-        }
-        if (empty($path)) {
-            return;
-        }
 
         $block['slug'] = str_replace('acf/', '', $block['name']);
         $block['classes'] = sanitize_html_class([
@@ -63,11 +54,7 @@ class AbstractBlock extends Block implements InitializableInterface
         $controller = $this;
 
         if(!get_fields()) {
-            if (file_exists($this->preview)) {
-                $path_preview = $this->preview;
-            } else {
-                $path_preview = locate_template($this->preview);
-            }
+            $path_preview = locate_template($this->preview);
             if (!empty($path_preview)) {
                 echo "<img src='". get_template_directory_uri() . "/" . $this->preview ."' />";
                 return;
@@ -80,7 +67,7 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['is_preview'] = $is_preview;
         $context['content'] = $content;
         $context['block'] = $block;
-        $context['fields'] = method_exists($this, "with") ? $this->with() : get_fields() ? get_fields() : $block['data'];
+        $context['fields'] = (method_exists($this, "with") ? $this->with() : get_fields()) ? get_fields() : $block['data'];
 
         Timber::render($path, $context);
     }
