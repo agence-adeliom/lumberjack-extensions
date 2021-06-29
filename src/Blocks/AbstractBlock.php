@@ -67,7 +67,17 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['is_preview'] = $is_preview;
         $context['content'] = $content;
         $context['block'] = $block;
-        $context['fields'] = (method_exists($this, "with") ? $this->with() : get_fields()) ? get_fields() : $block['data'];
+        
+        if(method_exists($this, "with")) {
+            $context['fields'] = $this->with();
+        }
+        elseif(get_fields()) {
+            $context['fields'] = get_fields();
+        }
+        else {
+            $context['fields'] = $block['data'];
+        }
+       
 
         Timber::render($path, $context);
     }
