@@ -88,13 +88,10 @@ class Post_Type_Columns
     public function columns($columns)
     {
         foreach ($this->columns as $slug => $column) {
-            // Columns can be removed when they are set to 'false'
-            if (false === $column) {
-                unset($columns[$slug]);
+            if (is_array($column) && $column['sortable']) {
+                $columns[$slug] = $slug;
                 continue;
             }
-
-            $columns[$slug] = $column['title'];
         }
 
         return $columns;
