@@ -53,7 +53,7 @@ class AbstractBlock extends Block implements InitializableInterface
 
         $controller = $this;
 
-        if(!get_fields()) {
+        if(!get_fields() && is_admin()) {
             $path_preview = locate_template($this->preview);
             if (!empty($path_preview)) {
                 echo "<img src='". get_template_directory_uri() . "/" . $this->preview ."' />";
