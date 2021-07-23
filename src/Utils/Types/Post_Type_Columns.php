@@ -87,9 +87,10 @@ class Post_Type_Columns
      */
     public function columns($columns)
     {
+
         foreach ($this->columns as $slug => $column) {
-            if (is_array($column) && $column['sortable']) {
-                $columns[$slug] = $slug;
+            if (is_array($column)) {
+                $columns[$slug] = $column["title"] ?: $slug;
                 continue;
             }
         }
@@ -108,9 +109,11 @@ class Post_Type_Columns
     {
         foreach ($this->columns as $slug => $column) {
             // Remove column when it’s not sortable.
-            if (!$column['sortable']) {
+            if (!isset($column['sortable']) || !$column['sortable']) {
                 unset($columns[$slug]);
                 continue;
+            }else{
+                $columns[$slug] = $slug;
             }
         }
 
@@ -158,13 +161,18 @@ class Post_Type_Columns
             return;
         }
 
-        if ('acf' === $column['type']) {
-            $value = get_field($column_name, $post_id);
-        } elseif ('meta' === $column['type']) {
+        if(isset($column['type'])){
+            if ('acf' === $column['type']) {
+                $value = get_field($column_name, $post_id);
+            } elseif ('meta' === $column['type']) {
+                $value = get_post_meta($post_id, $column_name, true);
+            }
+        }else{
             $value = get_post_meta($post_id, $column_name, true);
         }
 
-        if (is_callable($column['transform'])) {
+
+        if (isset($column['transform']) && is_callable($column['transform'])) {
             $value = call_user_func($column['transform'], $value, $post_id);
         }
 
