@@ -194,7 +194,10 @@ class Post_Type_Columns
         }
 
         $meta_columns = array_filter($this->columns, function ($column) {
-            return 'meta' === $column['type'] && $column['searchable'];
+            if(isset($column['type']) && isset($column['searchable'])) {
+                return 'meta' === $column['type'] && $column['searchable'];
+            }
+            return false;
         });
 
         $meta_query = ['relation' => 'OR'];
