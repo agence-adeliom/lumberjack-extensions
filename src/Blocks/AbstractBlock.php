@@ -53,7 +53,7 @@ class AbstractBlock extends Block implements InitializableInterface
 
         $controller = $this;
 
-        if(!get_fields()) {
+        if(is_admin() && isset($block['data']['content']) && !empty($block['data']['content']['img_preview'])) {
             $path_preview = locate_template($this->preview);
             if (!empty($path_preview)) {
                 echo "<img src='". get_template_directory_uri() . "/" . $this->preview ."' />";
@@ -67,7 +67,7 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['is_preview'] = $is_preview;
         $context['content'] = $content;
         $context['block'] = $block;
-        
+
         if(method_exists($this, "with")) {
             $context['fields'] = $this->with();
         }
@@ -77,7 +77,7 @@ class AbstractBlock extends Block implements InitializableInterface
         else {
             $context['fields'] = $block['data'];
         }
-       
+
 
         Timber::render($path, $context);
     }

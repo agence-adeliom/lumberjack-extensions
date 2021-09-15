@@ -105,7 +105,7 @@ class Block
             'mode' => 'preview',
             'data' => [
                 "content" => [
-                    'is_preview' => true
+                    'img_preview' => true
                 ]
             ]
         ]
