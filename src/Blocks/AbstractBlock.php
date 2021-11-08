@@ -68,6 +68,10 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['content'] = $content;
         $context['block'] = $block;
 
+        if(method_exists($this, "addToContext")) {
+            $context['context_block'] = $this->addToContext();
+        }
+
         if(method_exists($this, "with")) {
             $context['fields'] = $this->with();
         }

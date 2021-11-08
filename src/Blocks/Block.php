@@ -181,6 +181,15 @@ class Block
         return $this->enabled;
     }
     /**
+     * Add context to block
+     * @since 0.1.0
+     * @return array
+     */
+    public function addToContext()
+    {
+        return [];
+    }
+    /**
      * User defined ACF fields
      *
      * @since 0.1.0
