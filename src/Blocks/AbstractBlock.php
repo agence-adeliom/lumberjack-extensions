@@ -1,4 +1,5 @@
 <?php
+
 namespace Adeliom\WP\Extensions\Blocks;
 
 
@@ -13,12 +14,23 @@ class AbstractBlock extends Block implements InitializableInterface
     {
         parent::__construct($settings);
 
+
         $this->dir = $settings['dir'] ?? "views/blocks";
-        $this->dir_preview = $settings['dir_preview'] ?? "assets/images/blocks-preview";
+        $this->dir_preview = $settings['dir_preview'] ?? "assets/images/admin/gutenberg-blocks";
+        $this->dir_icon = $settings['dir_icon'] ?? "assets/images/admin/gutenberg-blocks";
         $tpl = $this->name;
         $tpl = str_replace("-block", "", $tpl);
         $this->template = "{$this->dir}/{$tpl}{$this->fileExtension()}";
-        $this->preview = "{$this->dir_preview}/{$tpl}{$this->previewExtension()}";
+        $this->preview = "{$this->dir_preview}/{$tpl}/preview{$this->previewExtension()}";
+
+        $iconFile = get_template_directory() . "/{$this->dir_icon}/{$tpl}/icon{$this->iconExtension()}";
+        $this->icon = file_exists($iconFile) ? file_get_contents($iconFile) : parent::getIcon();
+
+    }
+
+    public function iconExtension(): string
+    {
+        return '.svg';
     }
 
     public function previewExtension(): string
@@ -53,10 +65,10 @@ class AbstractBlock extends Block implements InitializableInterface
 
         $controller = $this;
 
-        if(is_admin() && isset($block['data']['content']) && !empty($block['data']['content']['img_preview'])) {
+        if (is_admin() && isset($block['data']['content']) && !empty($block['data']['content']['img_preview'])) {
             $path_preview = locate_template($this->preview);
             if (!empty($path_preview)) {
-                echo "<img src='". get_template_directory_uri() . "/" . $this->preview ."' />";
+                echo "<img src='" . get_template_directory_uri() . "/" . $this->preview . "' />";
                 return;
             }
         }
@@ -68,14 +80,14 @@ class AbstractBlock extends Block implements InitializableInterface
         $context['content'] = $content;
         $context['block'] = $block;
 
-        if(method_exists($this, "addToContext")) {
+        if (method_exists($this, "addToContext")) {
             $context['context_block'] = $this->addToContext();
         }
 
-        if(method_exists($this, "with")) {
+        if (method_exists($this, "with")) {
             $context['fields'] = $this->with();
         }
-        elseif(get_fields()) {
+        else if (get_fields()) {
             $context['fields'] = get_fields();
         }
         else {
