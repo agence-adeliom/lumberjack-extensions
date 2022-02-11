@@ -23,7 +23,7 @@ class AbstractBlock extends Block implements InitializableInterface
         $this->template = "{$this->dir}/{$tpl}{$this->fileExtension()}";
         $this->preview = "{$this->dir_preview}/{$tpl}/preview{$this->previewExtension()}";
 
-        $iconFile = get_template_directory() . "/{$this->dir_icon}/{$tpl}/icon{$this->iconExtension()}";
+        $iconFile = get_template_directory() . "/{$this->dir_icon}/{$tpl}/picto{$this->iconExtension()}";
         $this->icon = file_exists($iconFile) ? file_get_contents($iconFile) : parent::getIcon();
 
     }
