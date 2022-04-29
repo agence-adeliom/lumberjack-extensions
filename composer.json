@@ -16,12 +16,6 @@
             "role": "Developer"
         }
     ],
-    "repositories": {
-        "adeliom-wp-cli": {
-            "type": "vcs",
-            "url": "https://adeliom:93ba9634b50f6531edf61140fba54fe1d7e93fc4@github.com/adeliom/wp-cli"
-        }
-    },
     "require": {
         "php": "^7.1",
         "blast/facades": "^1.0",
@@ -31,7 +25,7 @@
         "google/recaptcha": "^1.2",
         "roots/bedrock-disallow-indexing": "^2.0",
         "dugajean/wp-hook-annotations": "dev-master",
-        "adeliom/wp-cli": "dev-master",
+        "agence-adeliom/lumberjack-cli": "^1.1",
         "wp-cli/wp-cli-bundle": "*",
         "soberwp/intervention": "*",
         "wordplate/acf": "*",
