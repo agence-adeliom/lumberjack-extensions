@@ -6,10 +6,7 @@
   "scripts": {
     "release": "release-it"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/agence-adeliom/lumberjack-extensions.git"
-  },
+  "repository": "https://github.com/agence-adeliom/lumberjack-extensions",
   "author": "",
   "license": "ISC",
   "bugs": {
