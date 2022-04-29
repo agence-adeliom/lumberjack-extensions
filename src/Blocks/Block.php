@@ -207,7 +207,7 @@ class Block
      */
     public function getFields(): array
     {
-        return iterator_to_array($this->fields);
+        return iterator_to_array($this->fields, false);
     }
     /**
      * Get the block name
