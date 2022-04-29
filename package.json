@@ -4,7 +4,9 @@
   "description": "This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.",
   "main": "index.js",
   "scripts": {
-    "release": "release-it"
+    "release:patch": "release-it patch",
+    "release:minor": "release-it minor",
+    "release:major": "release-it major"
   },
   "repository": "https://github.com/agence-adeliom/lumberjack-extensions",
   "author": "",
