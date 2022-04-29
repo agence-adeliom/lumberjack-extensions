@@ -16,15 +16,22 @@
             "role": "Developer"
         }
     ],
+    "repositories": {
+        "adeliom-wp-cli": {
+            "type": "vcs",
+            "url": "https://adeliom:93ba9634b50f6531edf61140fba54fe1d7e93fc4@github.com/adeliom/wp-cli"
+        }
+    },
     "require": {
-        "php": "^7.1 || ^8.0",
+        "php": "^7.1",
         "blast/facades": "^1.0",
         "rareloop/lumberjack-core": "*",
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
         "google/recaptcha": "^1.2",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "agence-adeliom/lumberjack-cli": "^1.1",
+        "dugajean/wp-hook-annotations": "dev-master",
+        "adeliom/wp-cli": "dev-master",
         "wp-cli/wp-cli-bundle": "*",
         "soberwp/intervention": "*",
         "wordplate/acf": "*",
@@ -33,6 +40,8 @@
         "djboris88/timber-debugger": "*",
         "aaronadal/twig-list-loop": "^1.1",
         "neemzy/share-extension": "^1.0",
+        "dpolac/twig-lambda": "^1.0",
+        "umpirsky/twig-php-function": "^0.2",
         "jawira/case-converter": "^3.4"
     },
     "require-dev": {
@@ -58,9 +67,6 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "composer/installers": true
-        }
+        "sort-packages": true
     }
 }
