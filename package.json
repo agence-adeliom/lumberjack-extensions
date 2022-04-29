@@ -18,6 +18,7 @@
   "homepage": "https://github.com/agence-adeliom/lumberjack-extensions#readme",
   "devDependencies": {
     "@release-it/bumper": "^3.0.1",
+    "@release-it/conventional-changelog": "^4.3.0",
     "release-it": "^14.14.2"
   },
   "release-it": {
@@ -34,6 +35,10 @@
       "@release-it/bumper": {
         "in": "composer.json",
         "out": "composer.json"
+      },
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
       }
     }
   }
