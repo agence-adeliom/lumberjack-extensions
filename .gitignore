@@ -4,4 +4,5 @@ docs
 vendor
 coverage
 node_modules
+wp-content
 .idea/*
