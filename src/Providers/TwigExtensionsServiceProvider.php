@@ -2,6 +2,7 @@
 
 namespace Adeliom\WP\Extensions\Providers;
 
+use Adeliom\WP\Extensions\Twig\WebpackEncoreExtension;
 use Dugajean\WpHookAnnotations\HookRegistry;
 use Neemzy\Twig\Extension\Share\ShareExtension;
 use Rareloop\Lumberjack\Config;
@@ -27,6 +28,7 @@ class TwigExtensionsServiceProvider extends ServiceProvider
             $functionsToRegister = $config->get('twig.allowed_functions');
 
             $twig->addExtension(new \Aaronadal\TwigListLoop\Twig\TwigExtension());
+            $twig->addExtension(new WebpackEncoreExtension());
             foreach ($functionsToRegister ?? [] as $function) {
                 $twig->addFunction(new Twig_Function($function, $function));
             }

@@ -13,6 +13,7 @@ use Adeliom\WP\Extensions\Providers\InterventionServiceProvider;
 use Adeliom\WP\Extensions\Providers\RecaptchaServiceProvider;
 use Adeliom\WP\Extensions\Providers\TwigExtensionsServiceProvider;
 use Adeliom\WP\Extensions\Providers\ValidationServiceProvider;
+use Adeliom\WP\Extensions\Providers\WebpackEncoreProvider;
 use Neemzy\Twig\Extension\Share\ShareExtension;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
@@ -37,6 +38,7 @@ class Extensions extends ServiceProvider
         EventServiceProvider::class,
         AdminServiceProvider::class,
         BlocksServiceProvider::class,
+        WebpackEncoreProvider::class,
         TwigExtensionsServiceProvider::class
     ];
 
