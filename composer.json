@@ -19,7 +19,6 @@
     "require": {
         "php": "^7.4|^8.0",
         "aaronadal/twig-list-loop": "^1.1",
-        "agence-adeliom/lumberjack-cli": "^1.1",
         "blast/facades": "^1.0",
         "boxuk/wp-hook-attributes": "^0.0.2",
         "brick/event": "^0.1",
