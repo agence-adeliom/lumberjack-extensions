@@ -3,42 +3,40 @@
 namespace Adeliom\WP\Extensions\Utils\Types;
 
 /**
- * Class Post_Type_Labels
+ * Class PostTypeLabels
  *
  * @since 2.2.0
  */
-class Post_Type_Labels
+class PostTypeLabels
 {
     /**
      * Post type.
      *
      * @var null|string The post type slug.
      */
-    private $post_type = null;
+    private ?string $post_type = null;
 
     /**
      * Singular name.
      *
      * @var string The singular name of the post type.
      */
-    private $name_singular = '';
+    private string $name_singular = '';
 
     /**
      * Plural name.
      *
      * @var string The plural name of the post type.
      */
-    private $name_plural = '';
+    private string $name_plural = '';
 
     /**
      * Post type labels.
-     *
-     * @var array|null
      */
-    private $labels = null;
+    private ?array $labels = null;
 
     /**
-     * Post_Type_Labels constructor.
+     * PostTypeLabels constructor.
      *
      * @param string $post_type The post type slug.
      * @param string $name_singular The singular name of the post type.
@@ -53,7 +51,7 @@ class Post_Type_Labels
         $this->post_type     = $post_type;
         $this->name_singular = $name_singular;
         $this->name_plural   = $name_plural;
-        $this->labels        = $this->get_labels($name_singular, $name_plural);
+        $this->labels        = $this->getLabels($name_singular, $name_plural);
     }
 
     /**
@@ -69,9 +67,9 @@ class Post_Type_Labels
      *
      * @return array The translated labels.
      */
-    public function get_labels($name_singular, $name_plural)
+    public function getLabels(string $name_singular, string $name_plural): array
     {
-        $labels = [
+        return [
             'name' => $name_plural,
             'singular_name' => $name_singular,
             'add_new' => __('Add New', 'mind/types'),
@@ -126,22 +124,18 @@ class Post_Type_Labels
             'menu_name' => $name_plural,
             'name_admin_bar' => $name_singular,
         ];
-
-        return $labels;
     }
 
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
-        add_filter("post_type_labels_{$this->post_type}", function () {
-            return $this->labels;
-        });
+        add_filter(sprintf('post_type_labels_%s', $this->post_type), fn() => $this->labels);
 
         if (is_admin()) {
             // Update messages in backend.
-            add_filter('post_updated_messages', [$this, 'add_post_updated_messages']);
+            add_filter('post_updated_messages', fn(array $messages): array => $this->addPostUpdatedMessages($messages));
         }
     }
 
@@ -154,7 +148,7 @@ class Post_Type_Labels
      *
      * @return array The filtered messages.
      */
-    public function add_post_updated_messages($messages)
+    public function addPostUpdatedMessages(array $messages): array
     {
         global $post_id;
 

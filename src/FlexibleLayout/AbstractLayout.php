@@ -1,9 +1,9 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\FlexibleLayout;
 
 use Traversable;
+use WordPlate\Acf\Fields\Field;
 use WordPlate\Acf\Fields\Layout;
 
 /**
@@ -15,15 +15,14 @@ abstract class AbstractLayout
     /**
      * The layout maker
      *
-     * @param string $title
-     * @param string $type
-     * @return Layout
+     * @param string|null $title
+     * @param string|null $type
      */
-    public static function make(string $title = null, string $key = null, string $type = null)
+    public static function make(string $title = null, string $key = null, string $type = null): \WordPlate\Acf\Fields\Layout
     {
-        $title = $title ?? static::getTitle();
-        $key   = "flex_" . (!is_null($key) ? $key : static::getKey());
-        $type  = $type ?? static::getType();
+        $title ??= static::getTitle();
+        $key   = "flex_" . (is_null($key) ? static::getKey() : $key);
+        $type ??= static::getType();
         return Layout::make($title, $key ?? null)->layout($type)->fields(iterator_to_array(static::getFields()));
     }
 
@@ -57,7 +56,7 @@ abstract class AbstractLayout
     /**
      * Return the list of field used on the layout
      *
-     * @return Traversable
+     * @return \ArrayIterator<int, Field>
      */
     abstract public static function getFields(): Traversable;
 }

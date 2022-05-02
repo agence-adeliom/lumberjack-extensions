@@ -1,9 +1,17 @@
 <?php
+
 namespace Adeliom\WP\Extensions\Blocks;
+
 use WordPlate\Acf\FieldGroup;
+use WordPlate\Acf\Fields\Field;
 use WordPlate\Acf\Location;
+
 class Block
 {
+    /**
+     * @var \ArrayIterator<int, Field>
+     */
+    public $fields;
     /**
      * The directory name of the block.
      *
@@ -11,6 +19,7 @@ class Block
      * @var string $name
      */
     protected $name = '';
+
     /**
      * The display name of the block.
      *
@@ -18,6 +27,7 @@ class Block
      * @var string $title
      */
     protected $title = '';
+
     /**
      * The description of the block.
      *
@@ -25,6 +35,7 @@ class Block
      * @var string $description
      */
     protected $description;
+
     /**
      * The category this block belongs to.
      *
@@ -32,6 +43,7 @@ class Block
      * @var string $category
      */
     protected $category;
+
     /**
      * The icon of this block.
      *
@@ -39,6 +51,7 @@ class Block
      * @var string $icon
      */
     protected $icon = '';
+
     /**
      * An array of keywords the block will be found under.
      *
@@ -46,6 +59,7 @@ class Block
      * @var array $keywords
      */
     protected $keywords = [];
+
     /**
      * An array of Post Types the block will be available to.
      *
@@ -53,6 +67,7 @@ class Block
      * @var array $post_types
      */
     protected $post_types = ['post', 'page'];
+
     /**
      * The default display mode of the block that is shown to the user.
      *
@@ -60,6 +75,7 @@ class Block
      * @var string $mode
      */
     protected $mode = 'preview';
+
     /**
      * The block alignment class.
      *
@@ -67,6 +83,7 @@ class Block
      * @var string $align
      */
     protected $align = '';
+
     /**
      * The block alignment class.
      *
@@ -74,6 +91,7 @@ class Block
      * @var string $align_text
      */
     protected $align_text = '';
+
     /**
      * The block alignment class.
      *
@@ -81,6 +99,7 @@ class Block
      * @var string $align_content
      */
     protected $align_content = '';
+
     /**
      * Features supported by the block.
      *
@@ -94,6 +113,7 @@ class Block
         'align_content' => false,
         'jsx' => false
     ];
+
     /**
      * Preview example.
      *
@@ -110,6 +130,7 @@ class Block
             ]
         ]
     ];
+
     /**
      * The blocks directory path.
      *
@@ -117,6 +138,7 @@ class Block
      * @var string $dir
      */
     public $dir;
+
     /**
      * The blocks accessibility.
      *
@@ -124,12 +146,14 @@ class Block
      * @var boolean $enabled
      */
     protected $enabled = true;
+
     /**
      * The blocks assets.
      *
      * @since 0.1.0
      */
     public $assets;
+
     /**
      * Begin block construction!
      *
@@ -142,7 +166,7 @@ class Block
         $reflection     = new \ReflectionClass($this);
         $block_path     = $reflection->getFileName();
         $directory_path = dirname($block_path);
-        $this->name     = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', basename($block_path, '.php')));
+        $this->name     = strtolower(preg_replace('#(?<!^)[A-Z]#', '-$0', basename($block_path, '.php')));
         // User definitions.
         $this->enabled = $settings['enabled'] ?? true;
         $this->assets = $settings['enqueue_assets'] ?? null;
@@ -170,6 +194,7 @@ class Block
         // Set ACF Fields to the block.
         $this->fields = $this->registerFields();
     }
+
     /**
      * Is the block enabled?
      *
@@ -180,6 +205,7 @@ class Block
     {
         return $this->enabled;
     }
+
     /**
      * Add context to block
      * @since 0.1.0
@@ -189,26 +215,29 @@ class Block
     {
         return [];
     }
+
     /**
      * User defined ACF fields
      *
      * @since 0.1.0
-     * @return \Traversable
+     * @return  \ArrayIterator<int, Field>|array
      */
     protected function registerFields(): \Traversable
     {
         return [];
     }
+
     /**
      * Get the block ACF fields
      *
      * @since 0.1.0
-     * @return array
+     * @return Field[]
      */
     public function getFields(): array
     {
         return iterator_to_array($this->fields, false);
     }
+
     /**
      * Get the block name
      *
@@ -219,6 +248,7 @@ class Block
     {
         return $this->name;
     }
+
     /**
      * Get the block title
      *
@@ -229,6 +259,7 @@ class Block
     {
         return $this->title;
     }
+
     /**
      * Get the block description
      *
@@ -239,6 +270,7 @@ class Block
     {
         return $this->description;
     }
+
     /**
      * Get the block category
      *
@@ -249,6 +281,7 @@ class Block
     {
         return $this->category;
     }
+
     /**
      * Get the block icon
      *
@@ -259,6 +292,7 @@ class Block
     {
         return $this->icon;
     }
+
     /**
      * Get the block keywords
      *
@@ -269,6 +303,7 @@ class Block
     {
         return $this->keywords;
     }
+
     /**
      * Get the block post types
      *
@@ -279,6 +314,7 @@ class Block
     {
         return $this->post_types;
     }
+
     /**
      * Get the block mode
      *
@@ -289,6 +325,7 @@ class Block
     {
         return $this->mode;
     }
+
     /**
      * Get the block alignment
      *
@@ -299,6 +336,7 @@ class Block
     {
         return $this->align;
     }
+
     /**
      * Get the text alignment
      *
@@ -309,6 +347,7 @@ class Block
     {
         return $this->align_text;
     }
+
     /**
      * Get the content alignment
      *
@@ -319,6 +358,7 @@ class Block
     {
         return $this->align_content;
     }
+
     /**
      * Get featured supported by the block
      *
@@ -329,6 +369,7 @@ class Block
     {
         return $this->supports;
     }
+
     /**
      * Get example for preview
      *
@@ -339,6 +380,7 @@ class Block
     {
         return $this->example;
     }
+
     /**
      * Get the block registration data
      *
@@ -364,9 +406,10 @@ class Block
             'enqueue_assets' => $this->assets,
         ];
     }
+
     public function init(): void
     {
-        if( function_exists('acf_register_block_type') ) {
+        if (function_exists('acf_register_block_type')) {
             $block_data                    = $this->getBlockData();
             $block_data['render_callback'] = [$this, 'renderBlockCallback'];
             $fields                        = $this->getFields();

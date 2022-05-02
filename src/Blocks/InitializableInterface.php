@@ -1,6 +1,6 @@
 <?php
-namespace Adeliom\WP\Extensions\Blocks;
 
+namespace Adeliom\WP\Extensions\Blocks;
 
 interface InitializableInterface
 {

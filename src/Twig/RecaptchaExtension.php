@@ -30,17 +30,14 @@ class RecaptchaExtension extends AbstractExtension
     /**
      * @return array|TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new TwigFunction('recaptcha', [$this, 'recaptcha']),
+            new TwigFunction('recaptcha', fn(): string => $this->recaptcha()),
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function recaptcha()
+    public function recaptcha(): string
     {
         wp_enqueue_script('lumberjack-recaptcha', 'https://www.google.com/recaptcha/api.js', [], 'v2');
 

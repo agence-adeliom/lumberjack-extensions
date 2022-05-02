@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 use Brick\Event\EventDispatcher;
@@ -16,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Bind the EventDispatcher into the container
      */
-    public function register()
+    public function register(): void
     {
         $dispatcher = new EventDispatcher();
         $this->app->bind("event_dispatcher", $dispatcher);
@@ -27,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
      * Regiter all listenner from config file
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         $eventsToRegister = $config->get('events.listener');
         if (is_array($eventsToRegister)) {

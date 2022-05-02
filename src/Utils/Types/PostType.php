@@ -3,9 +3,9 @@
 namespace Adeliom\WP\Extensions\Utils\Types;
 
 /**
- * Class Post_Type
+ * Class PostType
  */
-class Post_Type
+class PostType
 {
     /**
      * Registers post types based on an array definition.
@@ -23,12 +23,12 @@ class Post_Type
      * @since 2.0.0
      *
      */
-    public static function register($post_types = [])
+    public static function register(array $post_types = []): void
     {
         foreach ($post_types as $post_type => $args) {
-            $args = self::parse_args($args);
+            $args = self::parseArgs($args);
 
-            self::register_extensions($post_type, $args);
+            self::registerExtensions($post_type, $args);
 
             // Defaults for post registration.
             $args = wp_parse_args($args['args'] ?? [], [
@@ -47,11 +47,10 @@ class Post_Type
      *
      * @param array $args An array of arguments.
      *
-     * @return mixed
+     * @return mixed[]
      * @since 2.2.0
-     *
      */
-    private static function parse_args($args)
+    private static function parseArgs(array $args): array
     {
         if (isset($args['name_singular']) && !isset($args['name_plural'])) {
             $args['name_plural'] = $args['name_singular'];
@@ -68,18 +67,18 @@ class Post_Type
      * @since 2.2.0
      *
      */
-    private static function register_extensions($post_type, $args)
+    private static function registerExtensions(string $post_type, array $args): void
     {
         if (isset($args['name_singular'])) {
-            (new Post_Type_Labels($post_type, $args['name_singular'], $args['name_plural']))->init();
+            (new PostTypeLabels($post_type, $args['name_singular'], $args['name_plural']))->init();
         }
 
         if (isset($args['query'])) {
-            (new Post_Type_Query($post_type, $args['query']))->init();
+            (new PostTypeQuery($post_type, $args['query']))->init();
         }
 
         if (isset($args['admin_columns'])) {
-            (new Post_Type_Columns($post_type, $args['admin_columns']))->init();
+            (new PostTypeColumns($post_type, $args['admin_columns']))->init();
         }
 
         if (isset($args['page_for_archive'])) {
@@ -90,21 +89,21 @@ class Post_Type
                 'show_post_state' => true,
             ]);
 
-            (new Post_Type_Page(
+            (new PostTypePage(
                 $post_type,
                 $page_for_archive['post_id'],
                 $page_for_archive
             ))->init();
 
             if (!empty($page_for_archive['customizer_section'])) {
-                (new Post_Type_Page_Option(
+                (new PostTypePageOption(
                     $post_type,
                     $page_for_archive['customizer_section']
                 ))->init();
             }
 
             if ($page_for_archive['show_post_state']) {
-                (new Post_Type_Page_State($post_type))->init();
+                (new PostTypePageState($post_type))->init();
             }
         }
     }
@@ -122,12 +121,12 @@ class Post_Type
      *
      * @see   register_post_type()
      */
-    public static function update($post_types = [])
+    public static function update(array $post_types = []): void
     {
         foreach ($post_types as $post_type => $args) {
-            $args = self::parse_args($args);
+            $args = self::parseArgs($args);
 
-            self::register_extensions($post_type, $args);
+            self::registerExtensions($post_type, $args);
 
             if (isset($args['args'])) {
                 add_filter('register_post_type_args', function ($defaults, $name) use ($post_type, $args) {
@@ -135,9 +134,7 @@ class Post_Type
                         return $defaults;
                     }
 
-                    $args = wp_parse_args($args['args'], $defaults);
-
-                    return $args;
+                    return wp_parse_args($args['args'], $defaults);
                 }, 10, 2);
             }
         }
@@ -154,13 +151,13 @@ class Post_Type
      * @since 2.1.1
      *
      */
-    public static function rename($post_type, $name_singular, $name_plural)
+    public static function rename(string $post_type, string $name_singular, string $name_plural): void
     {
         if (!post_type_exists($post_type)) {
             return;
         }
 
-        (new Post_Type_Labels($post_type, $name_singular, $name_plural))->init();
+        (new PostTypeLabels($post_type, $name_singular, $name_plural))->init();
     }
 
     /**
@@ -172,10 +169,10 @@ class Post_Type
      * @since 2.1.0
      *
      */
-    public static function admin_columns($post_types = [])
+    public static function adminColumns(array $post_types = []): void
     {
         foreach ($post_types as $name => $column_settings) {
-            (new Post_Type_Columns($name, $column_settings))->init();
+            (new PostTypeColumns($name, $column_settings))->init();
         }
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 use Rareloop\Lumberjack\Config;
@@ -17,7 +16,7 @@ class CustomTaxonomyServiceProvider extends ServiceProvider
      * Register all taxonomies listed into the config file
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         $termsToRegister = $config->get('taxonomies.register');
 

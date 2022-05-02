@@ -2,13 +2,21 @@
 
 namespace Adeliom\WP\Extensions\Blocks;
 
-
 use Timber\Timber;
 
 class AbstractBlock extends Block implements InitializableInterface
 {
-    public $template = "";
-    public $preview = "";
+    /**
+     * @var mixed|string
+     */
+    public $dir_preview;
+    /**
+     * @var mixed|string
+     */
+    public $dir_icon;
+    public string $template = "";
+
+    public string $preview = "";
 
     public function __construct(array $settings)
     {
@@ -20,12 +28,12 @@ class AbstractBlock extends Block implements InitializableInterface
         $this->dir_icon = $settings['dir_icon'] ?? "assets/images/admin/gutenberg-blocks";
         $tpl = $this->name;
         $tpl = str_replace("-block", "", $tpl);
-        $this->template = "{$this->dir}/{$tpl}{$this->fileExtension()}";
-        $this->preview = "{$this->dir_preview}/{$tpl}/preview{$this->previewExtension()}";
 
-        $iconFile = get_template_directory() . "/{$this->dir_icon}/{$tpl}/picto{$this->iconExtension()}";
+        $this->template = sprintf('%s/%s%s', $this->dir, $tpl, $this->fileExtension());
+        $this->preview = sprintf('%s/%s/preview%s', $this->dir_preview, $tpl, $this->previewExtension());
+
+        $iconFile = get_template_directory() . sprintf('/%s/%s/picto%s', $this->dir_icon, $tpl, $this->iconExtension());
         $this->icon = file_exists($iconFile) ? file_get_contents($iconFile) : parent::getIcon();
-
     }
 
     public function iconExtension(): string
@@ -86,11 +94,9 @@ class AbstractBlock extends Block implements InitializableInterface
 
         if (method_exists($this, "with")) {
             $context['fields'] = $this->with();
-        }
-        else if (get_fields()) {
+        } elseif (get_fields()) {
             $context['fields'] = get_fields();
-        }
-        else {
+        } else {
             $context['fields'] = $block['data'];
         }
 

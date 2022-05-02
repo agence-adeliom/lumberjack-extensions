@@ -16,7 +16,7 @@ class CronServiceProvider extends ServiceProvider
      * Register all cronjob listed into the config file
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         $cronsToRegister = $config->get('cron.register');
         if (is_array($cronsToRegister)) {

@@ -1,6 +1,6 @@
 <?php
-namespace Adeliom\WP\Extensions\Blocks;
 
+namespace Adeliom\WP\Extensions\Blocks;
 
 class AbstractBlockPHP extends Block implements InitializableInterface
 {
@@ -18,15 +18,11 @@ class AbstractBlockPHP extends Block implements InitializableInterface
     {
         $frontend = apply_filters(
             'acf_gutenblocks/render_block_frontend_path',
-            "{$this->dir}/views/frontend{$this->fileExtension()}",
+            sprintf('%s/views/frontend%s', $this->dir, $this->fileExtension()),
             $this
         );
 
-        if (file_exists($frontend)) {
-            $path = $frontend;
-        } else {
-            $path = locate_template($frontend);
-        }
+        $path = file_exists($frontend) ? $frontend : locate_template($frontend);
 
         if (empty($path)) {
             return;
@@ -40,8 +36,9 @@ class AbstractBlockPHP extends Block implements InitializableInterface
         ]);
 
         $controller = $this;
+        $with = $this->with();
 
-        extract($this->with());
+        extract($with);
 
         ob_start();
 

@@ -1,0 +1,15 @@
+parameters:
+    level: 5
+    paths:
+        - src
+        - config
+    excludePaths:
+        - node_modules
+        - vendor
+    ignoreErrors:
+        - '#Call to an undefined static method Rareloop\\Lumberjack\\Facades\\(.*)::\.*#'
+        - '#Call to an undefined static method Adeliom\\WP\\Extensions\\Facades\\(.*)::\.*#'
+        - '#Access to an undefined property Rareloop\\Lumberjack\\(.*)::\$.*#'
+        - '#Access to an undefined property App\\Providers\\(.*)::\$.*#'
+        - '#Constant WP_(.*) not found.#'
+        - '#Function route invoked with 1 parameter, 0 required.#'

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Rules\RecaptchaRule;
@@ -21,7 +20,7 @@ class RecaptchaServiceProvider extends ServiceProvider
      * @param Validator $validator
      * @throws RuleQuashException
      */
-    public function boot(Validator $validator)
+    public function boot(Validator $validator): void
     {
         $validator->addValidator('recaptcha', $this->app->get(RecaptchaRule::class));
 
@@ -31,7 +30,7 @@ class RecaptchaServiceProvider extends ServiceProvider
             return $twig;
         });
 
-        add_filter('script_loader_tag', [$this, 'addScriptAttributes'], 10, 2);
+        add_filter('script_loader_tag', fn($tag, $handle) => $this->addScriptAttributes($tag, $handle), 10, 2);
     }
 
     /**

@@ -5,45 +5,41 @@ namespace Adeliom\WP\Extensions\Utils\Types;
 use WP_Post;
 
 /**
- * Class Post_Type_Page_State
+ * Class PostTypePageState
  */
-class Post_Type_Page_State
+class PostTypePageState
 {
     /**
      * Post type.
-     *
-     * @var string
      */
-    private $post_type;
+    private string $post_type;
 
     /**
      * Option name.
-     *
-     * @var string
      */
-    private $option_name;
+    private string $option_name;
 
     /**
-     * Post_Type_Page_State constructor.
+     * PostTypePageState constructor.
      *
      * @param string $post_type The post type to display the post state for.
      */
     public function __construct($post_type)
     {
         $this->post_type   = $post_type;
-        $this->option_name = "page_for_{$this->post_type}";
+        $this->option_name = sprintf('page_for_%s', $this->post_type);
     }
 
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
         if (!is_admin()) {
             return;
         }
 
-        add_filter('display_post_states', [$this, 'update_post_states'], 10, 2);
+        add_filter('display_post_states', fn(array $post_states, \WP_Post $post): array => $this->updatePostStates($post_states, $post), 10, 2);
     }
 
     /**
@@ -54,11 +50,12 @@ class Post_Type_Page_State
      *
      * @return string[] Updates post states.
      */
-    public function update_post_states($post_states, $post)
+    public function updatePostStates(array $post_states, $post): array
     {
         $post_type_object = get_post_type_object($this->post_type);
 
-        if ('page' === $post->post_type
+        if (
+            'page' === $post->post_type
             && (int)get_option($this->option_name) === $post->ID
         ) {
             $post_states[$this->option_name] = sprintf(

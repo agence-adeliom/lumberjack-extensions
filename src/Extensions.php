@@ -23,7 +23,6 @@ use Rareloop\Lumberjack\Providers\ServiceProvider;
  */
 class Extensions extends ServiceProvider
 {
-
     /**
      * @var string[]
      */
@@ -44,11 +43,10 @@ class Extensions extends ServiceProvider
     /**
      * Register the listed providers
      */
-    public function register()
+    public function register(): void
     {
         foreach (self::$providers as $provider) {
             $this->app->register($provider);
         }
     }
-
 }

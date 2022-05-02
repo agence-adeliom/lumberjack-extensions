@@ -6,7 +6,7 @@ use WP_Admin_Bar;
 use WP_Post_Type;
 
 /**
- * Class Post_Type_Page
+ * Class PostTypePage
  *
  * This class is partially inspired by the Page for Post Type plugin.
  *
@@ -14,31 +14,31 @@ use WP_Post_Type;
  *
  * @since 2.3
  */
-class Post_Type_Page
+class PostTypePage
 {
     /**
      * Post Type.
      *
      * @var null|string A custom post type slug.
      */
-    private $post_type = null;
+    private ?string $post_type = null;
 
     /**
      * Post ID
      *
      * @var null|int ID of the page for the archive.
      */
-    private $post_id = null;
+    private ?int $post_id = null;
 
     /**
      * Args.
      *
      * @var array An array of args.
      */
-    private $args = [];
+    private array $args = [];
 
     /**
-     * Post_Type_Page constructor.
+     * PostTypePage constructor.
      *
      * @param string $post_type A post type slug.
      * @param int $post_id The ID of the post to use as the archive page.
@@ -57,7 +57,7 @@ class Post_Type_Page
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
         /**
          * Bail out if no valid post ID is provided or post ID is 0, which happens when no page is
@@ -67,18 +67,18 @@ class Post_Type_Page
             return;
         }
 
-        add_filter('register_post_type_args', [$this, 'update_archive_slug'], 10, 2);
-        add_filter('post_type_archive_link', [$this, 'update_archive_link'], 10, 2);
+        add_filter('register_post_type_args', fn(array $args, string $post_type) => $this->updateArchiveSlug($args, $post_type), 10, 2);
+        add_filter('post_type_archive_link', fn(string $link, string $post_type): string => $this->updateArchiveLink($link, $post_type), 10, 2);
 
-        add_filter('wp_nav_menu_objects', [$this, 'filter_wp_nav_menu_objects'], 1);
-        add_filter('post_type_archive_title', [$this, 'set_post_type_archive_title'], 10, 2);
+        add_filter('wp_nav_menu_objects', fn(array $menu_items): array => $this->filterWpNavMenuObjects($menu_items), 1);
+        add_filter('post_type_archive_title', fn(string $title, string $post_type): string => $this->setPostTypeArchiveTitle($title, $post_type), 10, 2);
 
         if (!$this->args['is_singular_public']) {
-            add_action('template_redirect', [$this, 'template_redirect']);
+            add_action('template_redirect', fn() => $this->templateRedirect());
         }
 
         if (!is_admin()) {
-            add_action('admin_bar_menu', [$this, 'add_page_edit_link'], 80);
+            add_action('admin_bar_menu', fn(\WP_Admin_Bar $wp_admin_bar) => $this->addPageEditLink($wp_admin_bar), 80);
         }
     }
 
@@ -91,9 +91,9 @@ class Post_Type_Page
      * @param array $args Post type registration arguments.
      * @param string $post_type Post type name.
      *
-     * @return mixed
+     * @return mixed[]
      */
-    public function update_archive_slug($args, $post_type)
+    public function updateArchiveSlug(array $args, string $post_type): array
     {
         if ($post_type !== $this->post_type) {
             return $args;
@@ -130,21 +130,19 @@ class Post_Type_Page
      *
      * @since 2.4.3
      */
-    public function update_archive_link($link, $post_type)
+    public function updateArchiveLink(string $link, string $post_type)
     {
         if ($post_type !== $this->post_type) {
             return $link;
         }
 
-        $link = get_permalink($this->post_id);
-
-        return $link;
+        return get_permalink($this->post_id);
     }
 
     /**
      * Redirects singular page views to the post type archive page.
      */
-    public function template_redirect()
+    public function templateRedirect(): void
     {
         if (is_singular($this->post_type)) {
             wp_safe_redirect(get_post_type_archive_link($this->post_type), 301);
@@ -157,9 +155,9 @@ class Post_Type_Page
      *
      * @param array $menu_items Array of menu items.
      *
-     * @return array
+     * @return mixed[]
      */
-    public function filter_wp_nav_menu_objects($menu_items)
+    public function filterWpNavMenuObjects(array $menu_items): array
     {
         foreach ($menu_items as &$item) {
             if ('page' !== $item->object || (int)$item->object_id !== $this->post_id) {
@@ -195,7 +193,7 @@ class Post_Type_Page
      *
      * @since 2.4.1
      */
-    public function set_post_type_archive_title($title, $post_type)
+    public function setPostTypeArchiveTitle(string $title, string $post_type)
     {
         if ($this->post_type !== $post_type) {
             return $title;
@@ -212,11 +210,12 @@ class Post_Type_Page
      * @see wp_admin_bar_edit_menu()
      *
      */
-    public function add_page_edit_link($wp_admin_bar)
+    public function addPageEditLink($wp_admin_bar): void
     {
         $object = get_queried_object();
 
-        if (empty($object)
+        if (
+            empty($object)
             || !$object instanceof WP_Post_Type
             || $object->name !== $this->post_type
             || !$object->show_in_admin_bar

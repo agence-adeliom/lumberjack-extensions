@@ -1,4 +1,5 @@
 <?php
+
 namespace Adeliom\WP\Extensions\ViewModels;
 
 use Adeliom\WP\Extensions\QueryBuilder\QueryBuilder;
@@ -6,7 +7,11 @@ use Rareloop\Lumberjack\ViewModel;
 
 class Pagination extends ViewModel
 {
-    public static function fromQueryBuilder($resultsPerPage, $forPage)
+    /**
+     * @var array<string, mixed>|mixed
+     */
+    public $pagination;
+    public static function fromQueryBuilder($resultsPerPage, $forPage): self
     {
         $pagination = QueryBuilder::getPagination();
 
@@ -32,7 +37,10 @@ class Pagination extends ViewModel
         ];
     }
 
-    public function toArray() : array
+    /**
+     * @return mixed[]
+     */
+    public function toArray(): array
     {
         return $this->pagination;
     }

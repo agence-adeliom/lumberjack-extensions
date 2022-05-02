@@ -3,40 +3,38 @@
 namespace Adeliom\WP\Extensions\Utils\Types;
 
 /**
- * Class Taxonomy_Labels
+ * Class TaxonomyLabels
  */
-class Taxonomy_Labels
+class TaxonomyLabels
 {
     /**
      * Taxonomy.
      *
      * @var null|string The taxonomy slug.
      */
-    private $taxonomy = null;
+    private ?string $taxonomy = null;
 
     /**
      * Singular name.
      *
      * @var string The singular name of the taxonomy.
      */
-    private $name_singular = '';
+    private string $name_singular = '';
 
     /**
      * Plural name.
      *
      * @var string The plural name of the taxonomy.
      */
-    private $name_plural = '';
+    private string $name_plural = '';
 
     /**
      * Taxonomy labels.
-     *
-     * @var array|null
      */
-    private $labels = null;
+    private ?array $labels = null;
 
     /**
-     * Taxonomy_Labels constructor.
+     * TaxonomyLabels constructor.
      *
      * @param string $taxonomy The post type slug.
      * @param string $name_singular The singular name of the post type.
@@ -51,7 +49,7 @@ class Taxonomy_Labels
         $this->taxonomy      = $taxonomy;
         $this->name_singular = $name_singular;
         $this->name_plural   = $name_plural;
-        $this->labels        = $this->get_labels($name_singular, $name_plural);
+        $this->labels        = $this->getLabels($name_singular, $name_plural);
     }
 
     /**
@@ -67,9 +65,9 @@ class Taxonomy_Labels
      *
      * @return array The translated labels.
      */
-    public function get_labels($name_singular, $name_plural)
+    public function getLabels(string $name_singular, string $name_plural): array
     {
-        $labels = [
+        return [
             'name' => $name_plural,
             'singular_name' => $name_singular,
             /* translators: %s: Singular taxonomy name */
@@ -113,22 +111,18 @@ class Taxonomy_Labels
             'name_admin_bar' => $name_singular,
             'menu_name' => $name_plural,
         ];
-
-        return $labels;
     }
 
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
-        add_filter("taxonomy_labels_{$this->taxonomy}", function () {
-            return $this->labels;
-        });
+        add_filter(sprintf('taxonomy_labels_%s', $this->taxonomy), fn() => $this->labels);
 
         if (is_admin()) {
             // Update messages in backend.
-            add_filter('term_updated_messages', [$this, 'add_term_updated_messages']);
+            add_filter('term_updated_messages', fn(array $messages): array => $this->addTermUpdatedMessages($messages));
         }
     }
 
@@ -141,7 +135,7 @@ class Taxonomy_Labels
      *
      * @return array The filtered messages.
      */
-    public function add_term_updated_messages($messages)
+    public function addTermUpdatedMessages(array $messages): array
     {
         $messages[$this->taxonomy] = [
             0 => '',

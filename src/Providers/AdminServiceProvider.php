@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Admin\AbstractAdmin;
@@ -20,7 +19,7 @@ class AdminServiceProvider extends ServiceProvider
      * Register all Admin classes
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         $adminPath = $this->app->basePath() . "/app/Admin";
 
@@ -35,22 +34,27 @@ class AdminServiceProvider extends ServiceProvider
                     if ($classMeta->isSubclassOf(AbstractAdmin::class)) {
                         $class::register();
                     }
-                } catch (ReflectionException $e) {
+                } catch (ReflectionException $reflectionException) {
                 }
             }
         }
     }
 
-    private function getDirContents($path) {
+    /**
+     * @return mixed[]
+     */
+    private function getDirContents($path): array
+    {
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         $php_files = new \RegexIterator($rii, '/\.php$/');
 
-        $files = array(); 
-        foreach ($rii as $file)
-            if (!$file->isDir())
+        $files = array();
+        foreach ($rii as $file) {
+            if (!$file->isDir()) {
                 $files[] = $file->getPathname();
-    
+            }
+        }
+
         return $files;
     }
-
 }

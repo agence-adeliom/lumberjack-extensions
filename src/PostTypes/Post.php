@@ -1,16 +1,14 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\PostTypes;
 
-use Adeliom\WP\Extensions\Utils\Types\Post_Slug;
-use Adeliom\WP\Extensions\Utils\Types\Post_Type;
+use Adeliom\WP\Extensions\Utils\Types\PostSlug;
+use Adeliom\WP\Extensions\Utils\Types\PostType;
 use Rareloop\Lumberjack\Exceptions\PostTypeRegistrationException;
 use Rareloop\Lumberjack\Post as BasePost;
 
 class Post extends BasePost
 {
-
     public static function register()
     {
         $postType = static::getPostType();
@@ -24,7 +22,7 @@ class Post extends BasePost
             throw new PostTypeRegistrationException('Config not set');
         }
 
-        Post_Type::register([$postType => $config]);
+        PostType::register([$postType => $config]);
 
         self::customSlug(static::getPostTypeCustomSlug());
     }
@@ -36,7 +34,7 @@ class Post extends BasePost
     {
         $postType = static::getPostType();
 
-        $post_slugs = new Post_Slug();
+        $post_slugs = new PostSlug();
         $post_slugs->init();
 
         $post_slugs->register([
@@ -46,10 +44,9 @@ class Post extends BasePost
 
     protected static function getPostTypeCustomSlug()
     {
-        return function ($post_slug, $post_data, $post_id) {
-            return $post_slug;
-        };
+        return fn($post_slug, $post_data, $post_id) => $post_slug;
     }
+
     public static function paginate($perPage = 10, $args = [])
     {
         global $paged;
@@ -57,6 +54,7 @@ class Post extends BasePost
         if (!isset($paged) || !$paged) {
             $paged = 1;
         }
+
         $args = array_merge($args, [
             'posts_per_page' => $perPage,
             'paged' => $paged
@@ -70,7 +68,7 @@ class Post extends BasePost
 
     public function __isset($field)
     {
-        if(!empty(get_field($field, $this->ID))){
+        if (!empty(get_field($field, $this->ID))) {
             return true;
         }
 
@@ -79,7 +77,7 @@ class Post extends BasePost
 
     public function __get($field)
     {
-        if(!empty(get_field($field, $this->ID))){
+        if (!empty(get_field($field, $this->ID))) {
             return get_field($field, $this->ID);
         }
 

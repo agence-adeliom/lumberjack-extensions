@@ -1,9 +1,11 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Admin;
 
 use Traversable;
+use WordPlate\Acf\Fields\Field;
+use WordPlate\Acf\Location;
+
 use function Sober\Intervention\intervention;
 
 /**
@@ -18,9 +20,9 @@ abstract class AbstractAdmin
      */
     public static function register(): void
     {
-        if(static::hasOptionPage()){
+        if (static::hasOptionPage()) {
             $options = static::setupOptionPage();
-            if(function_exists("Sober\Intervention\intervention")){
+            if (function_exists("Sober\Intervention\intervention")) {
                 intervention('add-acf-page', $options["settings"], $options["roles"]);
             }
         }
@@ -121,13 +123,13 @@ abstract class AbstractAdmin
 
     /**
      * An list of fields
-     * @return Traversable
+     * @return \ArrayIterator<int, Field>
      */
     abstract public static function getFields(): Traversable;
 
     /**
      * An list containing 'rule groups' where each 'rule group' is an array containing 'rules'. Each group is considered an 'or', and each rule is considered an 'and'.
-     * @return Traversable
+     * @return \ArrayIterator<int, Location>
      */
     abstract public static function getLocation(): Traversable;
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 /**
@@ -10,5 +9,4 @@ namespace Adeliom\WP\Extensions\Providers;
  */
 class ValidationServiceProvider extends \Rareloop\Lumberjack\Validation\ValidationServiceProvider
 {
-
 }

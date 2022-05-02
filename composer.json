@@ -17,38 +17,40 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.4|^8.0",
+        "aaronadal/twig-list-loop": "^1.1",
+        "agence-adeliom/lumberjack-cli": "^1.1",
         "blast/facades": "^1.0",
+        "boxuk/wp-hook-attributes": "^0.0.2",
+        "brick/event": "^0.1",
+        "djboris88/timber-debugger": "*",
+        "google/recaptcha": "^1.2",
+        "jawira/case-converter": "^3.4",
+        "phpoption/phpoption": "^1.7",
         "rareloop/lumberjack-core": "*",
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
-        "google/recaptcha": "^1.2",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "dugajean/wp-hook-annotations": "dev-master",
-        "agence-adeliom/lumberjack-cli": "^1.1",
-        "wp-cli/wp-cli-bundle": "*",
         "soberwp/intervention": "*",
         "wordplate/acf": "*",
-        "phpoption/phpoption": "^1.7",
-        "brick/event": "^0.1",
-        "djboris88/timber-debugger": "*",
-        "aaronadal/twig-list-loop": "^1.1",
-        "neemzy/share-extension": "^1.0",
-        "dpolac/twig-lambda": "^1.0",
-        "umpirsky/twig-php-function": "^0.2",
-        "jawira/case-converter": "^3.4"
+        "wp-cli/wp-cli-bundle": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "phpstan/phpstan": "^1.6",
+        "rector/rector": "^0.12.23",
+        "roave/security-advisories": "dev-latest",
+        "squizlabs/php_codesniffer": "^3.5",
+        "wp-coding-standards/wpcs": "^2.3"
     },
     "autoload": {
         "psr-4": {
             "Adeliom\\WP\\Extensions\\": "src"
         },
         "files": [
-            "../../rareloop/lumberjack-core/src/functions.php",
-            "src/functions.php"
+            "../../rareloop/lumberjack-core/src/functions.php"
         ]
     },
     "autoload-dev": {
@@ -61,6 +63,10 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

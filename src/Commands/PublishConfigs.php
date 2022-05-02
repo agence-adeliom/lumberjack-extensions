@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Commands;
 
 use Adeliom\WP\CLI\Commands\MakeFromStubCommand;
@@ -38,7 +37,7 @@ class PublishConfigs extends MakeFromStubCommand
      * @param OutputInterface $output
      * @return mixed
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force       = (bool)$input->getOption('force');
         $configFiles = glob(__DIR__ . '/../../config/*.php');

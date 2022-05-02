@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\PostTypes;
 
 use Adeliom\WP\Extensions\Utils\Types\Taxonomy;
@@ -29,13 +28,13 @@ class Term extends TimberTerm
     public static function __callStatic($name, $arguments)
     {
         if (static::hasMacro($name)) {
-            return static::__macroableCallStatic($name, $arguments);
+            return static::macroableCallStatic($name, $arguments);
         }
 
-        trigger_error('Call to undefined method ' . __CLASS__ . '::' . $name . '()', E_USER_ERROR);
+        trigger_error('Call to undefined method ' . self::class . '::' . $name . '()', E_USER_ERROR);
     }
 
-    public static function register()
+    public static function register(): void
     {
         $term   = static::getTerm();
         $config = static::getTaxonomyConfig();
@@ -55,10 +54,8 @@ class Term extends TimberTerm
      * Return the key used to register the taxonomy with WordPress
      * First parameter of the `register_taxonomy` function:
      * https://codex.wordpress.org/Function_Reference/register_taxonomy
-     *
-     * @return string
      */
-    public static function getTerm()
+    public static function getTerm(): string
     {
         return 'category';
     }
@@ -78,7 +75,7 @@ class Term extends TimberTerm
     public function __call($name, $arguments)
     {
         if (static::hasMacro($name)) {
-            return $this->__macroableCall($name, $arguments);
+            return $this->macroableCall($name, $arguments);
         }
 
         return parent::__call($name, $arguments);
@@ -88,7 +85,7 @@ class Term extends TimberTerm
     {
         $term   = static::getTerm();
 
-        if(!empty(get_field($field, $term . "_" . $this->term_id))){
+        if (!empty(get_field($field, $term . "_" . $this->term_id))) {
             return true;
         }
 
@@ -99,7 +96,7 @@ class Term extends TimberTerm
     {
         $term   = static::getTerm();
 
-        if(!empty(get_field($field, $term . "_" . $this->term_id))){
+        if (!empty(get_field($field, $term . "_" . $this->term_id))) {
             return get_field($field, $term . "_" . $this->term_id);
         }
 

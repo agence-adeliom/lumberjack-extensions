@@ -5,26 +5,26 @@ namespace Adeliom\WP\Extensions\Utils\Types;
 use WP_Query;
 
 /**
- * Class Post_Type_Columns
+ * Class PostTypeColumns
  */
-class Post_Type_Columns
+class PostTypeColumns
 {
     /**
      * Post Type.
      *
      * @var null|string A custom post type slug.
      */
-    private $post_type = null;
+    private ?string $post_type = null;
 
     /**
      * Column definitions.
      *
      * @var array An array of columns with args.
      */
-    private $columns = [];
+    private array $columns = [];
 
     /**
-     * Post_Type_Columns constructor.
+     * PostTypeColumns constructor.
      *
      * @param string $post_type A post type slug.
      * @param array $columns An array of columns to be edited.
@@ -61,20 +61,14 @@ class Post_Type_Columns
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
-        add_filter('manage_edit-' . $this->post_type . '_columns', [$this, 'columns']);
-        add_filter('manage_edit-' . $this->post_type . '_sortable_columns', [
-            $this,
-            'columns_sortable',
-        ]);
-        add_action('manage_' . $this->post_type . '_posts_custom_column', [
-            $this,
-            'column_content',
-        ], 10, 2);
+        add_filter('manage_edit-' . $this->post_type . '_columns', fn(array $columns): array => $this->columns($columns));
+        add_filter('manage_edit-' . $this->post_type . '_sortable_columns', fn(array $columns): array => $this->columnsSortable($columns));
+        add_action('manage_' . $this->post_type . '_posts_custom_column', fn(string $column_name, int $post_id) => $this->columnContent($column_name, $post_id), 10, 2);
 
         if (is_admin()) {
-            add_filter('pre_get_posts', [$this, 'search_custom_fields']);
+            add_filter('pre_get_posts', fn(\WP_Query $query) => $this->searchCustomFields($query));
         }
     }
 
@@ -85,7 +79,7 @@ class Post_Type_Columns
      *
      * @return array Filtered array.
      */
-    public function columns($columns)
+    public function columns(array $columns): array
     {
 
         foreach ($this->columns as $slug => $column) {
@@ -105,14 +99,14 @@ class Post_Type_Columns
      *
      * @return array Filtered array.
      */
-    public function columns_sortable($columns)
+    public function columnsSortable(array $columns): array
     {
         foreach ($this->columns as $slug => $column) {
             // Remove column when it’s not sortable.
             if (!isset($column['sortable']) || !$column['sortable']) {
                 unset($columns[$slug]);
                 continue;
-            }else{
+            } else {
                 $columns[$slug] = $slug;
             }
         }
@@ -126,11 +120,13 @@ class Post_Type_Columns
      * @param string $column_name The column slug.
      * @param int $post_id The post ID.
      */
-    public function column_content($column_name, $post_id)
+    public function columnContent(string $column_name, int $post_id): void
     {
+        $value = null;
         // Bail out.
-        if (empty($this->columns)
-            || !in_array($column_name, array_keys($this->columns), true)
+        if (
+            empty($this->columns)
+            || !array_key_exists($column_name, $this->columns)
         ) {
             return;
         }
@@ -161,13 +157,13 @@ class Post_Type_Columns
             return;
         }
 
-        if(isset($column['type'])){
+        if (isset($column['type'])) {
             if ('acf' === $column['type']) {
                 $value = get_field($column_name, $post_id);
             } elseif ('meta' === $column['type']) {
                 $value = get_post_meta($post_id, $column_name, true);
             }
-        }else{
+        } else {
             $value = get_post_meta($post_id, $column_name, true);
         }
 
@@ -184,7 +180,7 @@ class Post_Type_Columns
      *
      * @param WP_Query $query WordPress query object.
      */
-    public function search_custom_fields(WP_Query $query)
+    public function searchCustomFields(WP_Query $query): void
     {
         global $typenow;
         $searchterm = $query->query_vars['s'];
@@ -193,16 +189,17 @@ class Post_Type_Columns
             return;
         }
 
-        $meta_columns = array_filter($this->columns, function ($column) {
-            if(isset($column['type']) && isset($column['searchable'])) {
+        $meta_columns = array_filter($this->columns, function ($column): bool {
+            if (isset($column['type']) && isset($column['searchable'])) {
                 return 'meta' === $column['type'] && $column['searchable'];
             }
+
             return false;
         });
 
         $meta_query = ['relation' => 'OR'];
 
-        foreach ($meta_columns as $key => $column) {
+        foreach (array_keys($meta_columns) as $key) {
             $meta_query[] = [
                 'key' => $key,
                 'value' => $searchterm,

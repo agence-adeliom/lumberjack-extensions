@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 /**
@@ -10,5 +9,4 @@ namespace Adeliom\WP\Extensions\Providers;
  */
 class EmailServiceProvider extends \Rareloop\Lumberjack\Email\EmailServiceProvider
 {
-
 }

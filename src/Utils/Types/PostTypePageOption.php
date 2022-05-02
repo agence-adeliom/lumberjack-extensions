@@ -5,35 +5,29 @@ namespace Adeliom\WP\Extensions\Utils\Types;
 use WP_Customize_Manager;
 
 /**
- * Class Post_Type_Page_Option
+ * Class PostTypePageOption
  *
  * Registers an option to select the page for your Custom Post Type in the Customizer.
  */
-class Post_Type_Page_Option
+class PostTypePageOption
 {
     /**
      * Post type.
-     *
-     * @var string
      */
-    private $post_type;
+    private string $post_type;
 
     /**
      * Customizer section.
-     *
-     * @var string
      */
-    private $customizer_section;
+    private string $customizer_section;
 
     /**
      * Option name.
-     *
-     * @var string
      */
-    private $option_name;
+    private string $option_name;
 
     /**
-     * Post_Type_Page_Option constructor.
+     * PostTypePageOption constructor.
      *
      * @param string $post_type The post type to register the customizer section for.
      * @param string $customizer_section The name of the customizer section where the option to set
@@ -44,19 +38,19 @@ class Post_Type_Page_Option
     {
         $this->post_type          = $post_type;
         $this->customizer_section = $customizer_section;
-        $this->option_name        = "page_for_{$this->post_type}";
+        $this->option_name        = sprintf('page_for_%s', $this->post_type);
     }
 
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
         if (!is_admin() && !is_customize_preview()) {
             return;
         }
 
-        add_action('customize_register', [$this, 'register_settings']);
+        add_action('customize_register', fn(\WP_Customize_Manager $wp_customize) => $this->registerSettings($wp_customize));
 
         /**
          * Rewrite rules need to be flushed in the next page load after the Custom Post Type was
@@ -64,12 +58,12 @@ class Post_Type_Page_Option
          * page load.
          */
         add_action(
-            "update_option_{$this->option_name}",
-            [$this, 'maybe_set_flush_transient'],
+            sprintf('update_option_%s', $this->option_name),
+            fn($old_value, $value) => $this->maybeSetFlushTansient($old_value, $value),
             10,
             2
         );
-        add_action('admin_init', [$this, 'maybe_flush_rewrite_rules']);
+        add_action('admin_init', fn() => $this->maybeFlushRewriteRules());
     }
 
     /**
@@ -77,7 +71,7 @@ class Post_Type_Page_Option
      *
      * @param WP_Customize_Manager $wp_customize Customizer instance.
      */
-    public function register_settings(WP_Customize_Manager $wp_customize)
+    public function registerSettings(WP_Customize_Manager $wp_customize): void
     {
         $post_type_object = get_post_type_object($this->post_type);
 
@@ -103,24 +97,24 @@ class Post_Type_Page_Option
      * @param mixed $old_value The old option value.
      * @param mixed $value The new option value.
      */
-    public function maybe_set_flush_transient($old_value, $value)
+    public function maybeSetFlushTansient($old_value, $value): void
     {
         if ($old_value !== $value) {
-            set_transient("flush_{$this->option_name}", true);
+            set_transient(sprintf('flush_%s', $this->option_name), true);
         }
     }
 
     /**
      * Flushes rewrite rules when transient is set.
      */
-    public function maybe_flush_rewrite_rules()
+    public function maybeFlushRewriteRules(): void
     {
-        $transient_name = "flush_{$this->option_name}";
+        $transient_name = sprintf('flush_%s', $this->option_name);
 
         if (get_transient($transient_name)) {
             delete_transient($transient_name);
 
-            add_action('shutdown', function () {
+            add_action('shutdown', function (): void {
                 flush_rewrite_rules(false);
             });
         }

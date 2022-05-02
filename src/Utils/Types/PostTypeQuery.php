@@ -5,26 +5,26 @@ namespace Adeliom\WP\Extensions\Utils\Types;
 use WP_Query;
 
 /**
- * Class Post_Type_Query
+ * Class PostTypeQuery
  */
-class Post_Type_Query
+class PostTypeQuery
 {
     /**
      * Post Type.
      *
      * @var null|string A custom post type slug.
      */
-    private $post_type = null;
+    private ?string $post_type = null;
 
     /**
      * Query args.
      *
      * @var array An array of query args.
      */
-    private $query_args = [];
+    private array $query_args = [];
 
     /**
-     * Custom_Post_Type_Query constructor.
+     * Custom_PostTypeQuery constructor.
      *
      * @param string $post_type The custom post type.
      * @param array $query_args Arguments used for WP_Query.
@@ -32,7 +32,7 @@ class Post_Type_Query
     public function __construct($post_type, $query_args)
     {
         $this->post_type  = $post_type;
-        $this->query_args = $this->parse_query_args($query_args);
+        $this->query_args = $this->parseQueryArgs($query_args);
     }
 
     /**
@@ -47,7 +47,7 @@ class Post_Type_Query
      * @since 2.2.0
      *
      */
-    public function parse_query_args($args)
+    public function parseQueryArgs(array $args): array
     {
         $query_args = [
             'frontend' => $args,
@@ -56,9 +56,7 @@ class Post_Type_Query
 
         if (isset($args['frontend']) || isset($args['backend'])) {
             foreach (['frontend', 'backend'] as $query_type) {
-                $query_args[$query_type] = isset($args[$query_type])
-                    ? $args[$query_type]
-                    : [];
+                $query_args[$query_type] = $args[$query_type] ?? [];
             }
         }
 
@@ -68,9 +66,9 @@ class Post_Type_Query
     /**
      * Inits hooks.
      */
-    public function init()
+    public function init(): void
     {
-        add_action('pre_get_posts', [$this, 'pre_get_posts']);
+        add_action('pre_get_posts', fn(\WP_Query $query) => $this->preGetPosts($query));
     }
 
     /**
@@ -78,7 +76,7 @@ class Post_Type_Query
      *
      * @param WP_Query $query A WP_Query object.
      */
-    public function pre_get_posts($query)
+    public function preGetPosts($query): void
     {
         global $typenow;
 

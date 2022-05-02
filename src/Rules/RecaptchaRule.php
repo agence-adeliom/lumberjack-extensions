@@ -34,9 +34,8 @@ class RecaptchaRule extends Rule
 
     /**
      * @param $value
-     * @return bool
      */
-    public function check($value)
+    public function check($value): bool
     {
         $recaptcha = new ReCaptcha($this->config->get('recaptcha.secret'));
 

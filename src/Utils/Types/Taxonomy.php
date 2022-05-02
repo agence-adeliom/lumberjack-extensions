@@ -19,11 +19,11 @@ class Taxonomy
      * @type array $args Arguments that get passed to taxonomy registration.
      * }
      */
-    public static function register($taxonomies = [])
+    public static function register(array $taxonomies = []): void
     {
         foreach ($taxonomies as $taxonomy => $args) {
-            $args = self::parse_args($args);
-            self::register_extensions($taxonomy, $args);
+            $args = self::parseArgs($args);
+            self::registerExtensions($taxonomy, $args);
 
             $for_post_types = $args['for_post_types'];
 
@@ -45,11 +45,10 @@ class Taxonomy
      *
      * @param array $args An array of arguments.
      *
-     * @return mixed
+     * @return mixed[]
      * @since 2.2.0
-     *
      */
-    private static function parse_args($args)
+    private static function parseArgs(array $args): array
     {
         if (isset($args['name_singular']) && !isset($args['name_plural'])) {
             $args['name_plural'] = $args['name_singular'];
@@ -66,10 +65,10 @@ class Taxonomy
      * @since 2.2.0
      *
      */
-    private static function register_extensions($taxonomy, $args)
+    private static function registerExtensions(string $taxonomy, array $args): void
     {
         if (isset($args['name_singular'])) {
-            (new Taxonomy_Labels($taxonomy, $args['name_singular'], $args['name_plural']))->init();
+            (new TaxonomyLabels($taxonomy, $args['name_singular'], $args['name_plural']))->init();
         }
     }
 
@@ -86,11 +85,11 @@ class Taxonomy
      *
      * @see register_taxonomy()
      */
-    public static function update($taxonomies = [])
+    public static function update(array $taxonomies = []): void
     {
         foreach ($taxonomies as $taxonomy => $args) {
-            $args = self::parse_args($args);
-            self::register_extensions($taxonomy, $args);
+            $args = self::parseArgs($args);
+            self::registerExtensions($taxonomy, $args);
 
             if (isset($args['args'])) {
                 add_filter('register_taxonomy_args', function ($defaults, $name) use ($taxonomy, $args) {
@@ -98,9 +97,7 @@ class Taxonomy
                         return $defaults;
                     }
 
-                    $args = wp_parse_args($args['args'], $defaults);
-
-                    return $args;
+                    return wp_parse_args($args['args'], $defaults);
                 }, 10, 2);
             }
         }
@@ -117,12 +114,12 @@ class Taxonomy
      * @since 2.2.0
      *
      */
-    public static function rename($taxonomy, $name_singular, $name_plural)
+    public static function rename(string $taxonomy, string $name_singular, string $name_plural): void
     {
         if (!taxonomy_exists($taxonomy)) {
             return;
         }
 
-        (new Taxonomy_Labels($taxonomy, $name_singular, $name_plural))->init();
+        (new TaxonomyLabels($taxonomy, $name_singular, $name_plural))->init();
     }
 }

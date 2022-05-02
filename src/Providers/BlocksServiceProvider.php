@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Admin\AbstractAdmin;
@@ -21,17 +20,17 @@ class BlocksServiceProvider extends ServiceProvider
      * Register all Admin classes
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         $adminPath = $this->app->basePath() . "/app/Blocks";
 
-        if(!file_exists($adminPath)){
+        if (!file_exists($adminPath)) {
             return;
         }
 
         foreach ($this->getDirContents($adminPath) as $file) {
             $info = pathinfo($file);
-            if($info['extension'] === "php") {
+            if ($info['extension'] === "php") {
                 include($file);
             }
         }
@@ -50,22 +49,27 @@ class BlocksServiceProvider extends ServiceProvider
 
                         $instance->init();
                     }
-                } catch (ReflectionException $e) {
+                } catch (ReflectionException $reflectionException) {
                 }
             }
         }
     }
 
-    private function getDirContents($path) {
+    /**
+     * @return mixed[]
+     */
+    private function getDirContents($path): array
+    {
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         $php_files = new \RegexIterator($rii, '/\.php$/');
 
         $files = array();
-        foreach ($rii as $file)
-            if (!$file->isDir())
+        foreach ($rii as $file) {
+            if (!$file->isDir()) {
                 $files[] = $file->getPathname();
+            }
+        }
 
         return $files;
     }
-
 }

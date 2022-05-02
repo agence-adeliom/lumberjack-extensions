@@ -11,7 +11,7 @@ use ReflectionException;
  * @see https://github.com/anthonybudd/WP_Cron
  * @package Adeliom\WP\Extensions\Crons
  */
-abstract class WP_CRON
+abstract class Cron
 {
     /**
      * Setup de interval between executions
@@ -32,11 +32,11 @@ abstract class WP_CRON
      */
     public static function register()
     {
-        $class = get_called_class();
-        $self  = new $class;
+        $class = static::class;
+        $self  = new $class();
         $slug  = $self->slug();
 
-        add_filter('cron_schedules', array($self, 'scheduleFilter'));
+        add_filter('cron_schedules', fn($schedules) => $self->scheduleFilter($schedules));
 
         if (!wp_next_scheduled($slug)) {
             wp_schedule_event(time(), $self->schedule(), $slug);
@@ -59,7 +59,7 @@ abstract class WP_CRON
     {
         $interval = $this->calculateInterval();
 
-        if (!in_array($this->schedule(), array_keys($schedules))) {
+        if (!array_key_exists($this->schedule(), $schedules)) {
             $schedules[$this->schedule()] = array(
                 'interval' => $interval,
                 'display' => 'Every ' . floor($interval / 60) . ' minutes',
@@ -75,14 +75,14 @@ abstract class WP_CRON
      * @return float|int
      * @throws Exception
      */
-    public function calculateInterval()
+    public function calculateInterval(): int
     {
 
         if (!is_array($this->every)) {
             throw new Exception("Interval must be an array");
         }
 
-        if (!(count(array_filter(array_keys($this->every), 'is_string')) > 0)) {
+        if (count(array_filter(array_keys($this->every), 'is_string')) <= 0) {
             throw new Exception("WP_Cron::\$interval must be an assoc array");
         }
 
@@ -93,12 +93,12 @@ abstract class WP_CRON
             'hours' => 3600,
             'days' => 86400,
             'weeks' => 604800,
-            'months' => 2628000,
+            'months' => 2_628_000,
         );
 
         foreach ($multipliers as $unit => $multiplier) {
             if (isset($this->every[$unit]) && is_int($this->every[$unit])) {
-                $interval = $interval + ($this->every[$unit] * $multiplier);
+                $interval += $this->every[$unit] * $multiplier;
             }
         }
 
@@ -108,10 +108,9 @@ abstract class WP_CRON
     /**
      * Return the schedule key
      *
-     * @return string
      * @throws ReflectionException
      */
-    public function schedule()
+    public function schedule(): string
     {
         return 'schedule_' . $this->slug();
     }
@@ -119,10 +118,9 @@ abstract class WP_CRON
     /**
      * Generate the job slug
      *
-     * @return string
      * @throws ReflectionException
      */
-    public function slug()
+    public function slug(): string
     {
         $reflect = new ReflectionClass($this);
         $class   = $reflect->getShortName();

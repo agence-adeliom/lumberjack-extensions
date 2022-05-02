@@ -10,10 +10,7 @@ use Blast\Facades\AbstractFacade;
  */
 class EventDispatcher extends AbstractFacade
 {
-    /**
-     * @return string
-     */
-    protected static function accessor()
+    protected static function accessor(): string
     {
         return 'event_dispatcher';
     }

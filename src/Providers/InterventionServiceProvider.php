@@ -15,7 +15,7 @@ class InterventionServiceProvider extends ServiceProvider
      * Enable Intervention
      * @param Config $config
      */
-    public function boot(Config $config)
+    public function boot(Config $config): void
     {
         if (file_exists($this->app->basePath() . "/config/intervention.php")) {
             require_once $this->app->basePath() . "/config/intervention.php";

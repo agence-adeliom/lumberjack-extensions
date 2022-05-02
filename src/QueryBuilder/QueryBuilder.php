@@ -1,9 +1,9 @@
 <?php
+
 namespace Adeliom\WP\Extensions\QueryBuilder;
 
 use Adeliom\WP\Extensions\PostTypes\Post;
 use Timber\Timber;
-
 
 class QueryBuilder extends \Rareloop\Lumberjack\QueryBuilder
 {
@@ -11,7 +11,7 @@ class QueryBuilder extends \Rareloop\Lumberjack\QueryBuilder
     private $page;
     protected $postClass = Post::class;
 
-    public function getParameters() : array
+    public function getParameters(): array
     {
         $params = parent::getParameters();
 
@@ -56,5 +56,4 @@ class QueryBuilder extends \Rareloop\Lumberjack\QueryBuilder
     {
         return Timber::get_pagination($prefs);
     }
-
 }
