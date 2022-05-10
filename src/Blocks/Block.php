@@ -2,7 +2,6 @@
 
 namespace Adeliom\WP\Extensions\Blocks;
 
-use WordPlate\Acf\FieldGroup;
 use WordPlate\Acf\Fields\Field;
 use WordPlate\Acf\Location;
 
@@ -415,15 +414,14 @@ class Block
             $fields                        = $this->getFields();
             acf_register_block_type($block_data);
             if (!empty($fields)) {
-                $acf        = [
+                $acf = [
                     'title' => "Block - " . static::getTitle(),
                     'fields' => $fields,
                     'location' => [
-                        Location::if("block", "==", "acf/" . $this->getName())
+                        Location::where("block", "==", "acf/" . $this->getName())
                     ],
                 ];
-                $fieldGroup = new FieldGroup($acf);
-                acf_add_local_field_group($fieldGroup->toArray());
+                register_extended_field_group($acf);
             }
         }
     }
