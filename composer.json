@@ -16,6 +16,9 @@
             "role": "Developer"
         }
     ],
+    "conflict": {
+        "wordplate/acf": "^12"
+    },
     "require": {
         "php": "^7.4|^8.0",
         "aaronadal/twig-list-loop": "^1.1",
