@@ -3,8 +3,6 @@
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Twig\WebpackEncoreExtension;
-use Dugajean\WpHookAnnotations\HookRegistry;
-use Neemzy\Twig\Extension\Share\ShareExtension;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 use HelloNico\Twig\DumpExtension;
