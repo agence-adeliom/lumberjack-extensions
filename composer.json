@@ -20,7 +20,7 @@
         "php": "^8.0",
         "aaronadal/twig-list-loop": "^1.1",
         "blast/facades": "^1.0",
-        "boxuk/wp-hook-attributes": "^0.0.2",
+        "arnaud-ritti/wp-hook": "^0.0",
         "brick/event": "^0.1",
         "djboris88/timber-debugger": "*",
         "google/recaptcha": "^1.2",
@@ -30,7 +30,6 @@
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "soberwp/intervention": "*",
         "wordplate/acf": "*",
         "wp-cli/wp-cli-bundle": "*"
     },

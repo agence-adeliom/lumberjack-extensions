@@ -23,7 +23,7 @@ abstract class AbstractLayout
         $title ??= static::getTitle();
         $key   = "flex_" . (is_null($key) ? static::getKey() : $key);
         $type ??= static::getType();
-        return Layout::make($title, $key ?? null)->layout($type)->fields(iterator_to_array(static::getFields()));
+        return Layout::make($title, $key ?? null)->layout($type)->fields(iterator_to_array(static::getFields(), false));
     }
 
     /**

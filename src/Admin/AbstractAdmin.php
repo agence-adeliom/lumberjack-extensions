@@ -6,8 +6,6 @@ use Traversable;
 use WordPlate\Acf\Fields\Field;
 use WordPlate\Acf\Location;
 
-use function Sober\Intervention\intervention;
-
 /**
  * Class AbstractAdmin
  * @package Adeliom\WP\Extensions\Admin
@@ -20,18 +18,16 @@ abstract class AbstractAdmin
      */
     public static function register(): void
     {
-        if (static::hasOptionPage()) {
+        if (static::hasOptionPage() && function_exists('acf_add_options_page')) {
             $options = static::setupOptionPage();
-            if (function_exists("Sober\Intervention\intervention")) {
-                intervention('add-acf-page', $options["settings"], $options["roles"]);
-            }
+            acf_add_options_page($options);
         }
 
         register_extended_field_group([
             'title' => static::getTitle(),
             'style' => static::getStyle(),
-            'fields' => iterator_to_array(static::getFields()),
-            'location' => iterator_to_array(static::getLocation()),
+            'fields' => iterator_to_array(static::getFields(), false),
+            'location' => iterator_to_array(static::getLocation(), false),
             'position' => static::getPosition(),
             'label_placement' => static::getLabelPlacement(),
             'instruction_placement' => static::getInstructionPlacement(),
@@ -116,8 +112,11 @@ abstract class AbstractAdmin
     public static function setupOptionPage(): array
     {
         return [
-            "settings" => "Options",
-            "roles" => ['admin', 'editor']
+            'page_title' => "Options",
+            'menu_title' => 'Options',
+            'menu_slug'  => self::getSlug(),
+            'capability' => 'edit_theme_options',
+            'autoload' => true
         ];
     }
 
