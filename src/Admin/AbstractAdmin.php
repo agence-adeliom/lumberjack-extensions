@@ -3,8 +3,8 @@
 namespace Adeliom\WP\Extensions\Admin;
 
 use Traversable;
-use WordPlate\Acf\Fields\Field;
-use WordPlate\Acf\Location;
+use Extended\ACF\Fields\Field;
+use Extended\ACF\Location;
 
 /**
  * Class AbstractAdmin

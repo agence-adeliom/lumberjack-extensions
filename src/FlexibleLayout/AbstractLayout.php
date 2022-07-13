@@ -3,8 +3,8 @@
 namespace Adeliom\WP\Extensions\FlexibleLayout;
 
 use Traversable;
-use WordPlate\Acf\Fields\Field;
-use WordPlate\Acf\Fields\Layout;
+use Extended\ACF\Fields\Field;
+use Extended\ACF\Fields\Layout;
 
 /**
  * Class AbstractLayout
@@ -18,7 +18,7 @@ abstract class AbstractLayout
      * @param string|null $title
      * @param string|null $type
      */
-    public static function make(string $title = null, string $key = null, string $type = null): \WordPlate\Acf\Fields\Layout
+    public static function make(string $title = null, string $key = null, string $type = null): \Extended\ACF\Fields\Layout
     {
         $title ??= static::getTitle();
         $key   = "flex_" . (is_null($key) ? static::getKey() : $key);

@@ -2,8 +2,8 @@
 
 namespace Adeliom\WP\Extensions\Blocks;
 
-use WordPlate\Acf\Fields\Field;
-use WordPlate\Acf\Location;
+use Extended\ACF\Fields\Field;
+use Extended\ACF\Location;
 
 class Block
 {
