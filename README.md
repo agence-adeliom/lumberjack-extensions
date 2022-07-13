@@ -14,6 +14,15 @@ composer require agence-adeliom/lumberjack-extensions
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
+### Update repo
+- Commit your changes to the repo
+- Tag your commits
+- Update composer.json version
+- Run this command
+```bash
+npm run release:patch
+```
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
