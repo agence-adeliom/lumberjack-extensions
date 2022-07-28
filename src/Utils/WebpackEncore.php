@@ -186,13 +186,13 @@ class WebpackEncore
         $withoutLeadingSlash = \ltrim($resource, '/');
         $manifest = $this->getManifest();
         if (isset($manifest[$resource])) {
-            return $manifest[$resource];
+            return self::getUrl($manifest[$resource]);
         }
         if (isset($manifest[$withoutLeadingSlash])) {
-            return $manifest[$withoutLeadingSlash];
+            return self::getUrl($manifest[$withoutLeadingSlash]);
         }
 
-        return $resource;
+        return self::getUrl($resource);
     }
 
     private function register(string $name, string $entrypoint, array $config): array
