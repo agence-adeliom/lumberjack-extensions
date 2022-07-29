@@ -4,6 +4,7 @@ namespace Adeliom\WP\Extensions\Providers;
 
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
+use Ari\WpHook\HookRegistry;
 
 /**
  * Class HookServiceProvider
@@ -11,6 +12,14 @@ use Rareloop\Lumberjack\Providers\ServiceProvider;
  */
 class HookServiceProvider extends ServiceProvider
 {
+
+    public function register()
+    {
+        $hookRegisty = new HookRegistry();
+        $this->app->bind("hooks", $hookRegisty);
+        $this->app->bind(HookRegistry::class, $hookRegisty);
+    }
+
     /**
      * Register all hooks listed into the config file
      * @param Config $config
@@ -21,6 +30,8 @@ class HookServiceProvider extends ServiceProvider
         $hooksToRegister = $config->get('hooks.register');
         $ns = [];
         foreach ($hooksToRegister as $hook) {
+            $this->app->get(HookRegistry::class)->bootstrap($hook);
+
             $class = new \ReflectionClass($hook);
             $hookNs = $class->getNamespaceName();
             if (!in_array($hookNs, $ns, true)) {

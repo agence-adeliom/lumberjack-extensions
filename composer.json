@@ -1,6 +1,6 @@
 {
     "name": "agence-adeliom/lumberjack-extensions",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "",
     "keywords": [
         "adeliom",
@@ -24,6 +24,7 @@
         "aaronadal/twig-list-loop": "^1.1",
         "blast/facades": "^1.0",
         "boxuk/wp-hook-attributes": "^0.0.2",
+        "arnaud-ritti/wp-hook": "^0.0",
         "brick/event": "^0.1",
         "djboris88/timber-debugger": "*",
         "google/recaptcha": "^1.2",
