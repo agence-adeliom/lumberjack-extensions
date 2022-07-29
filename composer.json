@@ -1,6 +1,6 @@
 {
     "name": "agence-adeliom/lumberjack-extensions",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "",
     "keywords": [
         "adeliom",
@@ -30,7 +30,7 @@
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "wordplate/acf": "*",
+        "vinkla/extended-acf": "^13",
         "wp-cli/wp-cli-bundle": "*"
     },
     "require-dev": {
