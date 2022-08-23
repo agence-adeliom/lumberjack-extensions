@@ -5,6 +5,14 @@ use WordPlate\Acf\Location;
 class Block
 {
     /**
+     * The id of the block.
+     *
+     * @since 0.1.0
+     * @var string $id
+     */
+    protected $id = '';
+
+    /**
      * The directory name of the block.
      *
      * @since 0.1.0
@@ -18,6 +26,7 @@ class Block
      * @var string $title
      */
     protected $title = '';
+
     /**
      * The description of the block.
      *
@@ -144,6 +153,7 @@ class Block
         $directory_path = dirname($block_path);
         $this->name     = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', basename($block_path, '.php')));
         // User definitions.
+        $this->title_display = $settings['title_display'] ?? $settings['title'];
         $this->enabled = $settings['enabled'] ?? true;
         $this->assets = $settings['enqueue_assets'] ?? null;
         $this->dir     = $settings['dir'] ?? $directory_path;
@@ -155,14 +165,14 @@ class Block
         $this->align_text    = $settings['align_text'] ?? $this->getAlignmentText();
         $this->supports    = isset($settings['supports']) && is_array($settings['supports']) ? array_merge($settings['supports'], $this->getSupports()) : $this->getSupports();
         $settings = apply_filters('acf_gutenblocks/block_settings', [
-            'title'       => $settings['title'],
+            'title'       => $settings['id'] ?? $settings['title'],
             'description' => $settings['description'],
             'category'    => $settings['category'],
             'icon'        => $this->icon,
             'supports'    => $this->supports,
             'post_types'  => $settings['post_types'] ?? $this->post_types,
         ], $this->name);
-        $this->title       = $settings['title'];
+        $this->title       = $settings['id'] ?? $settings['title'];
         $this->description = $settings['description'];
         $this->category    = $settings['category'];
         $this->icon        = $settings['icon'];
@@ -229,6 +239,18 @@ class Block
     {
         return $this->title;
     }
+
+    /**
+     * Get the block title
+     *
+     * @since 0.1.0
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
     /**
      * Get the block description
      *
