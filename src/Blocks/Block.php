@@ -4,13 +4,6 @@ use WordPlate\Acf\FieldGroup;
 use WordPlate\Acf\Location;
 class Block
 {
-    /**
-     * The id of the block.
-     *
-     * @since 0.1.0
-     * @var string $id
-     */
-    protected $id = '';
 
     /**
      * The directory name of the block.
@@ -26,6 +19,14 @@ class Block
      * @var string $title
      */
     protected $title = '';
+
+    /**
+     * The display name of the block.
+     *
+     * @since 0.1.0
+     * @var string $title_display
+     */
+    protected $title_display = '';
 
     /**
      * The description of the block.
@@ -153,7 +154,7 @@ class Block
         $directory_path = dirname($block_path);
         $this->name     = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', basename($block_path, '.php')));
         // User definitions.
-        $this->title_display = $settings['title_display'] ?? $settings['title'];
+        $this->title_display = $settings['title'];
         $this->enabled = $settings['enabled'] ?? true;
         $this->assets = $settings['enqueue_assets'] ?? null;
         $this->dir     = $settings['dir'] ?? $directory_path;
@@ -246,9 +247,9 @@ class Block
      * @since 0.1.0
      * @return string
      */
-    public function getId(): string
+    public function getTitleDisplay(): string
     {
-        return $this->id;
+        return $this->title_display;
     }
 
     /**
@@ -371,7 +372,7 @@ class Block
     {
         return [
             'name' => $this->getName(),
-            'title' => $this->getTitle(),
+            'title' => $this->getTitleDisplay(),
             'description' => $this->getDescription(),
             'category' => $this->getCategory(),
             'icon' => $this->getIcon(),
