@@ -1,6 +1,6 @@
 {
     "name": "agence-adeliom/lumberjack-extensions",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "",
     "keywords": [
         "adeliom",
@@ -27,7 +27,7 @@
         "dugajean/wp-hook-annotations": "dev-master",
         "agence-adeliom/lumberjack-cli": "^1.1",
         "wp-cli/wp-cli-bundle": "*",
-        "soberwp/intervention": "*",
+        "soberwp/intervention": "^1.3",
         "wordplate/acf": "*",
         "phpoption/phpoption": "^1.7",
         "brick/event": "^0.1",
