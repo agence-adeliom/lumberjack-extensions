@@ -146,7 +146,22 @@ class AbstractBlock extends Block implements InitializableInterface
             } // 3. Cas CHAMP SIMPLE
             else {
                 // On ne prend que la valeur, on ignore les clés "_name" (field keys)
-                $result[$name] = $data[$full_key] ?? null;
+                $value = $data[$full_key] ?? null;
+
+                // Cas IMAGE avec return_format = 'array' : la donnée brute est un ID,
+                // on reconstruit le tableau ACF complet via acf_get_attachment()
+                if (
+                    $field['type'] === 'image'
+                    && ($field['return_format'] ?? '') === 'array'
+                    && is_numeric($value)
+                    && !empty($value)
+                    && function_exists('acf_get_attachment')
+                ) {
+                    $attachment = acf_get_attachment((int) $value);
+                    $value = $attachment ?: $value;
+                }
+
+                $result[$name] = $value;
             }
         }
 
