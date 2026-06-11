@@ -30,7 +30,7 @@
         "rareloop/lumberjack-email": "*",
         "rareloop/lumberjack-validation": "*",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "vinkla/extended-acf": "^13",
+        "vinkla/extended-acf": "^14 || ^15",
         "wp-cli/wp-cli-bundle": "*"
     },
     "require-dev": {
