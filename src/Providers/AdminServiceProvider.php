@@ -3,6 +3,7 @@
 namespace Adeliom\WP\Extensions\Providers;
 
 use Adeliom\WP\Extensions\Admin\AbstractAdmin;
+use Adeliom\WP\Extensions\Hooks\FontLibraryHooks;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 use ReflectionClass;
@@ -21,6 +22,10 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot(Config $config): void
     {
+        // WordPress 7.0 : désactivation de la Font Library (menu + accès direct).
+        add_action('admin_menu', [FontLibraryHooks::class, "removeFontLibraryMenu"], 999, 0);
+        add_action('admin_init', [FontLibraryHooks::class, "blockFontLibraryAccess"], 10, 0);
+
         $adminPath = $this->app->basePath() . "/app/Admin";
 
         foreach ($this->getDirContents($adminPath) as $file) {
