@@ -16,9 +16,9 @@
   },
   "homepage": "https://github.com/agence-adeliom/lumberjack-extensions#readme",
   "devDependencies": {
-    "@release-it/bumper": "^3.0.1",
-    "@release-it/conventional-changelog": "^4.3.0",
-    "release-it": "^14.14.2"
+    "@release-it/bumper": "^4.0.0",
+    "@release-it/conventional-changelog": "^5.1.0",
+    "release-it": "^15.5.0"
   },
   "release-it": {
     "git": {
